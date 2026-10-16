@@ -1,12 +1,16 @@
 class AppConfig {
-  static const mapsApiKey = String.fromEnvironment('MAPS_API_KEY');
-  static const apiBaseUrl = String.fromEnvironment(
+  static const String mapsApiKey =
+  String.fromEnvironment('MAPS_API_KEY');
+
+  static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://192.168.102.24:8085/ecom_db',
+    defaultValue: 'http://localhost:8080/api/v1',
   );
-  // ── Auth ─────────────────────────────────────────────────────────────────
 
+  // ── Auth ────────────────────────────────────────
+  static const String signIn = '/auth/sign-in';
+  static const String signUp = '/auth/sign-up';
 
-  // ── HomePage ───────────────────────────────────────────────────────────
-
+  // ── Home ────────────────────────────────────────
+  static const String home = '/home';
 }
