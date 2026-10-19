@@ -1,25 +1,22 @@
 import 'package:dio/dio.dart';
 
+import '../../config/app_config.dart';
+
 /// Central Dio instance for all backend calls.
 ///
-/// Set the backend base URL with the `API_BASE_URL` dart-define, e.g.:
-///   flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080
-///
-/// Defaults to `http://localhost:8080` (works for Flutter web/desktop).
+/// The base URL is read from `AppConfig.apiBaseUrl` (set via the
+/// `API_BASE_URL` dart-define). Defaults to `http://localhost:8080/api/v1`.
 class DioProvider {
   DioProvider._();
 
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: const String.fromEnvironment(
-        'API_BASE_URL',
-        defaultValue: 'http://localhost:8080',
-      ),
+      baseUrl: AppConfig.apiBaseUrl,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: {'Content-Type': 'application/json'},
     ),
-  );
+  )..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
 
   static Dio get dio => _dio;
 }

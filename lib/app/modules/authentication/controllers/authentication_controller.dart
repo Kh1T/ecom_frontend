@@ -2,16 +2,19 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../data/providers/dio_provider.dart';
+import '../../../config/app_config.dart';
+import '../../../data/providers/api_provider.dart';
+import '../../../data/services/storage_service.dart';
 import '../../../routes/app_pages.dart';
 
 class AuthenticationController extends GetxController {
   final isLoading = false.obs;
 
+  ApiProvider get _api => Get.find<ApiProvider>();
+  StorageService get _storage => Get.find<StorageService>();
+
   /// Bearer token returned by the backend after a successful sign-in/up.
-  /// In a real app you should persist this (e.g. with get_storage or
-  /// shared_preferences) and attach it to outgoing requests.
-  String? token;
+  String? get token => _storage.token;
 
   // Form controllers so the view can bind directly to this controller.
   final emailController = TextEditingController();
@@ -29,7 +32,7 @@ class AuthenticationController extends GetxController {
     }
 
     await _authenticate(
-      path: '/api/auth/sign-up',
+      path: AppConfig.signUp,
       body: {
         'email': e,
         'password': p,
@@ -49,7 +52,7 @@ class AuthenticationController extends GetxController {
     }
 
     await _authenticate(
-      path: '/api/auth/sign-in',
+      path: AppConfig.signIn,
       body: {
         'email': e,
         'password': p,
@@ -65,14 +68,14 @@ class AuthenticationController extends GetxController {
   }) async {
     try {
       isLoading.value = true;
-      final response = await DioProvider.dio.post<Map<String, dynamic>>(
+      final response = await _api.post<Map<String, dynamic>>(
         path,
         data: body,
       );
 
       final data = response.data;
       if (data != null && data['token'] != null) {
-        token = data['token'] as String?;
+        _storage.token = data['token'] as String?;
       }
 
       Get.snackbar('Success', successMessage);
