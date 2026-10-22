@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../widgets/sidebar/sidebar.dart';
+import '../../products/views/products_view.dart';
 import '../controllers/admin_controller.dart';
 
 class AdminView extends GetView<AdminController> {
@@ -19,6 +21,11 @@ class AdminView extends GetView<AdminController> {
 
   Widget _buildDesktopLayout(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Admin Panel'),
+        centerTitle: true,
+      ),
+      drawer: const Sidebar(),
       body: Row(
         children: [
           Obx(
@@ -51,34 +58,7 @@ class AdminView extends GetView<AdminController> {
         title: const Text('Admin Panel'),
         centerTitle: true,
       ),
-      drawer: Drawer(
-        child: Obx(
-          () => ListView.builder(
-            itemCount: controller.menuItems.length,
-            itemBuilder: (context, index) {
-              final isSelected = controller.selectedIndex.value == index;
-              return ListTile(
-                leading: Icon(
-                  controller.menuIcons[index],
-                  color: isSelected ? Theme.of(context).colorScheme.primary : null,
-                ),
-                title: Text(
-                  controller.menuItems[index],
-                  style: TextStyle(
-                    color: isSelected ? Theme.of(context).colorScheme.primary : null,
-                    fontWeight: isSelected ? FontWeight.bold : null,
-                  ),
-                ),
-                selected: isSelected,
-                onTap: () {
-                  controller.selectIndex(index);
-                  Navigator.of(context).pop();
-                },
-              );
-            },
-          ),
-        ),
-      ),
+      drawer: const Sidebar(),
       body: _buildContent(context),
     );
   }
@@ -89,7 +69,7 @@ class AdminView extends GetView<AdminController> {
         index: controller.selectedIndex.value,
         children: [
           _buildDashboard(context),
-          _buildPlaceholderList('Products', Icons.inventory_2),
+          const ProductsView(),
           _buildPlaceholderList('Orders', Icons.shopping_cart),
           _buildPlaceholderList('Users', Icons.people),
         ],

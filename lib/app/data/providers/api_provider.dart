@@ -36,6 +36,39 @@ class ApiProvider {
     );
   }
 
+  Future<Response<T>> put<T>(
+    String path, {
+    dynamic data,
+  }) async {
+    return dio.put<T>(
+      path,
+      data: data,
+      options: _authOptions(),
+    );
+  }
+
+  Future<Response<T>> patch<T>(
+    String path, {
+    dynamic data,
+  }) async {
+    return dio.patch<T>(
+      path,
+      data: data,
+      options: _authOptions(),
+    );
+  }
+
+  Future<Response<T>> delete<T>(
+    String path, {
+    dynamic data,
+  }) async {
+    return dio.delete<T>(
+      path,
+      data: data,
+      options: _authOptions(),
+    );
+  }
+
   Options? _authOptions() {
     final token = _storage.token;
     if (token == null || token.isEmpty) return null;
