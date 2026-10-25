@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../config/app_config.dart';
 import '../../../data/providers/api_provider.dart';
 import '../../../data/services/storage_service.dart';
+import '../../../data/services/user_service.dart';
 import '../../../routes/app_pages.dart';
 
 class AuthenticationController extends GetxController {
@@ -74,8 +75,15 @@ class AuthenticationController extends GetxController {
       );
 
       final data = response.data;
-      if (data != null && data['token'] != null) {
-        _storage.token = data['token'] as String?;
+      final token = _extractToken(data);
+      if (token != null) {
+        _storage.token = token;
+        debugPrint('Token stored: $token');
+        if (Get.isRegistered<UserService>()) {
+          await Get.find<UserService>().fetchCurrentUser();
+        }
+      } else {
+        debugPrint('No token found in response: $data');
       }
 
       Get.snackbar('Success', successMessage);
@@ -87,6 +95,38 @@ class AuthenticationController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  String? _extractToken(dynamic data) {
+    if (data == null) return null;
+    if (data is! Map<String, dynamic>) return null;
+
+    final tokenKeys = [
+      'accessToken',
+      'token',
+      'access_token',
+      'jwt',
+      'jwtToken',
+      'tokenValue',
+      'id_token',
+      'idToken',
+      'bearerToken',
+    ];
+
+    // Check nested data first: { data: { token: ... } }
+    final nested = data['data'] ?? data['result'] ?? data['response'];
+    if (nested is Map<String, dynamic>) {
+      for (final key in tokenKeys) {
+        if (nested[key] != null) return nested[key].toString();
+      }
+    }
+
+    // Check top level
+    for (final key in tokenKeys) {
+      if (data[key] != null) return data[key].toString();
+    }
+
+    return null;
   }
 
   String _extractError(DioException error) {

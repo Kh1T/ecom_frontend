@@ -4,11 +4,10 @@ import 'package:get/get.dart';
 class AdminController extends GetxController {
   final selectedIndex = 0.obs;
 
-  final menuItems = <String>['Dashboard', 'Products', 'Orders', 'Users'];
+  final menuItems = <String>['Dashboard', 'Orders', 'Users'];
 
   final menuIcons = <IconData>[
     Icons.dashboard,
-    Icons.inventory_2,
     Icons.shopping_cart,
     Icons.people,
   ];

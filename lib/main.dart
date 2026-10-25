@@ -5,8 +5,9 @@ import 'package:get/get.dart';
 import 'app/dependency_injection.dart';
 import 'app/routes/app_pages.dart';
 
-void main() {
-  DependencyInjection.init();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DependencyInjection.init();
   runApp(const MyApp());
 }
 

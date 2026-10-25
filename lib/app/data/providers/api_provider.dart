@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
+import '../../config/app_config.dart';
 import '../services/storage_service.dart';
 import 'dio_provider.dart';
 
@@ -28,10 +30,12 @@ class ApiProvider {
   Future<Response<T>> post<T>(
     String path, {
     dynamic data,
+    Map<String, dynamic>? queryParameters,
   }) async {
     return dio.post<T>(
       path,
       data: data,
+      queryParameters: queryParameters,
       options: _authOptions(),
     );
   }
@@ -39,10 +43,12 @@ class ApiProvider {
   Future<Response<T>> put<T>(
     String path, {
     dynamic data,
+    Map<String, dynamic>? queryParameters,
   }) async {
     return dio.put<T>(
       path,
       data: data,
+      queryParameters: queryParameters,
       options: _authOptions(),
     );
   }
@@ -50,10 +56,12 @@ class ApiProvider {
   Future<Response<T>> patch<T>(
     String path, {
     dynamic data,
+    Map<String, dynamic>? queryParameters,
   }) async {
     return dio.patch<T>(
       path,
       data: data,
+      queryParameters: queryParameters,
       options: _authOptions(),
     );
   }
@@ -61,17 +69,25 @@ class ApiProvider {
   Future<Response<T>> delete<T>(
     String path, {
     dynamic data,
+    Map<String, dynamic>? queryParameters,
   }) async {
     return dio.delete<T>(
       path,
       data: data,
+      queryParameters: queryParameters,
       options: _authOptions(),
     );
   }
 
   Options? _authOptions() {
     final token = _storage.token;
-    if (token == null || token.isEmpty) return null;
-    return Options(headers: {'Authorization': 'Bearer $token'});
+    if (token == null || token.isEmpty) {
+      debugPrint('No token available for request');
+      return null;
+    }
+    final prefix = AppConfig.authTokenPrefix;
+    final headerValue = prefix.isEmpty ? token : '$prefix $token';
+    debugPrint('Attaching token to request: $headerValue');
+    return Options(headers: {'Authorization': headerValue});
   }
 }

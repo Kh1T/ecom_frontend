@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
 import '../../../widgets/sidebar/sidebar.dart';
-import '../../products/views/products_view.dart';
 import '../controllers/admin_controller.dart';
 
 class AdminView extends GetView<AdminController> {
@@ -69,7 +69,6 @@ class AdminView extends GetView<AdminController> {
         index: controller.selectedIndex.value,
         children: [
           _buildDashboard(context),
-          const ProductsView(),
           _buildPlaceholderList('Orders', Icons.shopping_cart),
           _buildPlaceholderList('Users', Icons.people),
         ],
@@ -99,31 +98,37 @@ class AdminView extends GetView<AdminController> {
                   for (final stat in controller.stats)
                     Card(
                       elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(
-                              stat['icon'] as IconData,
-                              size: 32,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  stat['value'] as String,
-                                  style: Theme.of(context).textTheme.headlineMedium,
-                                ),
-                                Text(
-                                  stat['title'] as String,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ],
-                            ),
-                          ],
+                      child: InkWell(
+                        onTap: stat['title'] == 'Products'
+                            ? () => Get.toNamed(Routes.PRODUCTS)
+                            : null,
+                        borderRadius: BorderRadius.circular(12),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(
+                                stat['icon'] as IconData,
+                                size: 32,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    stat['value'] as String,
+                                    style: Theme.of(context).textTheme.headlineMedium,
+                                  ),
+                                  Text(
+                                    stat['title'] as String,
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
