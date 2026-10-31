@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../middleware/admin_middleware.dart';
 import '../modules/admin/bindings/admin_binding.dart';
 import '../modules/admin/views/admin_view.dart';
 import '../modules/authentication/bindings/authentication_binding.dart';
@@ -38,6 +39,7 @@ class AppPages {
       name: _Paths.ADMIN,
       page: () => const AdminView(),
       binding: AdminBinding(),
+      middlewares: [AdminMiddleware()],
     ),
     GetPage(
       name: _Paths.PRODUCTS,

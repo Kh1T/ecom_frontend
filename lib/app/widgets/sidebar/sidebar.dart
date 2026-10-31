@@ -93,14 +93,21 @@ class Sidebar extends StatelessWidget {
               Get.offAllNamed(Routes.PRODUCTS);
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.admin_panel_settings),
-            title: const Text('Admin'),
-            selected: Get.currentRoute == Routes.ADMIN,
-            onTap: () {
-              Get.offAllNamed(Routes.ADMIN);
-            },
-          ),
+          if (userService != null)
+            Obx(() {
+              final user = userService.currentUser.value;
+              if (user == null || !user.isAdmin) return const SizedBox.shrink();
+              return ListTile(
+                leading: const Icon(Icons.admin_panel_settings),
+                title: const Text('Admin'),
+                selected: Get.currentRoute == Routes.ADMIN,
+                onTap: () {
+                  Get.offAllNamed(Routes.ADMIN);
+                },
+              );
+            })
+          else
+            const SizedBox.shrink(),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout),

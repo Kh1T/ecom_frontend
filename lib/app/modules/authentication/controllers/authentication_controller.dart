@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../config/app_config.dart';
+import '../../../data/models/user_model.dart';
 import '../../../data/providers/api_provider.dart';
 import '../../../data/services/storage_service.dart';
 import '../../../data/services/user_service.dart';
@@ -76,18 +77,21 @@ class AuthenticationController extends GetxController {
 
       final data = response.data;
       final token = _extractToken(data);
+      UserModel? user;
       if (token != null) {
         _storage.token = token;
         debugPrint('Token stored: $token');
         if (Get.isRegistered<UserService>()) {
-          await Get.find<UserService>().fetchCurrentUser();
+          user = await Get.find<UserService>().fetchCurrentUser();
         }
       } else {
         debugPrint('No token found in response: $data');
       }
 
       Get.snackbar('Success', successMessage);
-      Get.offAllNamed<dynamic>(Routes.HOME);
+      final destination =
+          user != null && user.isAdmin ? Routes.ADMIN : Routes.HOME;
+      Get.offAllNamed<dynamic>(destination);
     } on DioException catch (e) {
       _showError(_extractError(e));
     } catch (e) {
