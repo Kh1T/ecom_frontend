@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../widgets/sidebar/sidebar.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
@@ -13,6 +14,7 @@ class DashboardView extends GetView<DashboardController> {
         title: const Text('DashboardView'),
         centerTitle: true,
       ),
+      drawer: const Sidebar(),
       body: const Center(
         child: Text(
           'DashboardView is working',
