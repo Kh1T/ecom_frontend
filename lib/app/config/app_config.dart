@@ -30,4 +30,19 @@ class AppConfig {
 
   // ── Home ────────────────────────────────────────
   static const String home = '/home';
+
+  /// Resolves a backend path or relative URL into a full URL.
+  ///
+  /// If [path] already starts with `http://` or `https://`, it is returned
+  /// unchanged. Otherwise it is appended to [apiBaseUrl].
+  static String resolveUrl(String path) {
+    final trimmed = path.trim();
+    if (trimmed.isEmpty) return trimmed;
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    final base = apiBaseUrl.replaceAll(RegExp(r'/+$'), '');
+    final route = trimmed.replaceAll(RegExp(r'^/+'), '');
+    return '$base/$route';
+  }
 }

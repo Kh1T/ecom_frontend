@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/authentication_controller.dart';
 
 class AuthenticationView extends GetView<AuthenticationController> {
@@ -15,6 +16,18 @@ class AuthenticationView extends GetView<AuthenticationController> {
         appBar: AppBar(
           title: const Text('Authentication'),
           centerTitle: true,
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (Navigator.canPop(context)) {
+                  Get.back();
+                } else {
+                  Get.offAllNamed(Routes.HOME);
+                }
+              },
+              child: const Text('Skip'),
+            ),
+          ],
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Sign In'),

@@ -27,45 +27,72 @@ class Sidebar extends StatelessWidget {
           if (userService != null)
             Obx(() {
               final user = userService.currentUser.value;
-              final name = user != null && user.fullName.isNotEmpty
-                  ? user.fullName
-                  : (user != null && user.email.isNotEmpty
-                      ? user.email
-                      : 'Ecom User');
-              final email = user != null && user.email.isNotEmpty
-                  ? user.email
-                  : 'user@example.com';
-              final role = user?.role ?? '';
+              final isLoggedIn = userService.isLoggedIn && user != null;
 
-              return UserAccountsDrawerHeader(
-                accountName: Text(name),
-                accountEmail: Text(
-                  role.isNotEmpty ? '$email • $role' : email,
-                ),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Text(
-                    name.isNotEmpty ? name[0].toUpperCase() : 'U',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+              if (isLoggedIn) {
+                final name = user.fullName.isNotEmpty
+                    ? user.fullName
+                    : (user.email.isNotEmpty ? user.email : 'Ecom User');
+                final email = user.email.isNotEmpty ? user.email : 'user@example.com';
+                final role = user.role;
+
+                return UserAccountsDrawerHeader(
+                  accountName: Text(name),
+                  accountEmail: Text(
+                    role.isNotEmpty ? '$email • $role' : email,
+                  ),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: Text(
+                      name.isNotEmpty ? name[0].toUpperCase() : 'U',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigo,
+                      ),
+                    ),
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Colors.indigo,
+                  ),
+                );
+              } else {
+                return UserAccountsDrawerHeader(
+                  accountName: const Text('Guest User'),
+                  accountEmail: const Text('Tap to sign in'),
+                  onDetailsPressed: () {
+                    Get.toNamed(Routes.AUTHENTICATION);
+                  },
+                  currentAccountPicture: const CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.person_outline,
+                      size: 36,
                       color: Colors.indigo,
                     ),
                   ),
-                ),
-                decoration: const BoxDecoration(
-                  color: Colors.indigo,
-                ),
-              );
+                  decoration: const BoxDecoration(
+                    color: Colors.indigo,
+                  ),
+                );
+              }
             })
           else
-            const UserAccountsDrawerHeader(
-              accountName: Text('Ecom User'),
-              accountEmail: Text('user@example.com'),
-              currentAccountPicture: CircleAvatar(
-                child: Icon(Icons.person),
+            UserAccountsDrawerHeader(
+              accountName: const Text('Guest User'),
+              accountEmail: const Text('Tap to sign in'),
+              onDetailsPressed: () {
+                Get.toNamed(Routes.AUTHENTICATION);
+              },
+              currentAccountPicture: const CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.person_outline,
+                  size: 36,
+                  color: Colors.indigo,
+                ),
               ),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.indigo,
               ),
             ),
@@ -109,14 +136,37 @@ class Sidebar extends StatelessWidget {
           else
             const SizedBox.shrink(),
           const Divider(),
-          ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Logout'),
-            onTap: () {
-              userService?.clear();
-              Get.offAllNamed(Routes.AUTHENTICATION);
-            },
-          ),
+          if (userService != null)
+            Obx(() {
+              final isLoggedIn =
+                  userService.isLoggedIn && userService.currentUser.value != null;
+              if (isLoggedIn) {
+                return ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () {
+                    userService.clear();
+                    Get.offAllNamed(Routes.HOME);
+                  },
+                );
+              } else {
+                return ListTile(
+                  leading: const Icon(Icons.login),
+                  title: const Text('Sign In / Register'),
+                  onTap: () {
+                    Get.toNamed(Routes.AUTHENTICATION);
+                  },
+                );
+              }
+            })
+          else
+            ListTile(
+              leading: const Icon(Icons.login),
+              title: const Text('Sign In / Register'),
+              onTap: () {
+                Get.toNamed(Routes.AUTHENTICATION);
+              },
+            ),
         ],
       ),
     );

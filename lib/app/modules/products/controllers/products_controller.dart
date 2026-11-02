@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../config/app_config.dart';
 import '../../../data/providers/admin_product_provider.dart';
 import '../../../data/services/storage_service.dart';
 
@@ -39,6 +40,16 @@ class Product {
   /// Returns the first available image URL, or null if empty
   String? get firstImageUrl =>
       imageUrls.isNotEmpty && imageUrls.first.isNotEmpty ? imageUrls.first : null;
+
+  /// Resolves a single image URL against the API base URL if it is relative.
+  String? get resolvedFirstImageUrl {
+    final url = firstImageUrl;
+    return url != null && url.isNotEmpty ? AppConfig.resolveUrl(url) : null;
+  }
+
+  /// Resolves all image URLs against the API base URL if they are relative.
+  List<String> get resolvedImageUrls =>
+      imageUrls.where((u) => u.isNotEmpty).map(AppConfig.resolveUrl).toList();
 
   factory Product.fromJson(Map<String, dynamic> json) {
     List<String> parsedImages = [];

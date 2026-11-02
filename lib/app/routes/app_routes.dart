@@ -8,6 +8,7 @@ abstract class Routes {
   static const DASHBOARD = _Paths.DASHBOARD;
   static const ADMIN = _Paths.ADMIN;
   static const PRODUCTS = _Paths.PRODUCTS;
+  static const SEARCH = _Paths.SEARCH;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const DASHBOARD = '/dashboard';
   static const ADMIN = '/admin';
   static const PRODUCTS = '/products';
+  static const SEARCH = '/search';
 }
