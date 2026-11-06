@@ -18,13 +18,18 @@ class UserService extends GetxService {
   @override
   void onInit() {
     super.onInit();
-    if (isLoggedIn) {
+    currentUser.value = _storage.user;
+    if (isLoggedIn && !(_storage.token?.startsWith('dummy_') ?? false)) {
       fetchCurrentUser();
     }
   }
 
   Future<UserModel?> fetchCurrentUser() async {
     if (!isLoggedIn) return null;
+    if (_storage.token?.startsWith('dummy_') ?? false) {
+      currentUser.value = _storage.user;
+      return _storage.user;
+    }
     try {
       isLoading.value = true;
       final user = await _authProvider.getCurrentUser();
@@ -34,7 +39,7 @@ class UserService extends GetxService {
       return user;
     } catch (e) {
       debugPrint('Failed to fetch current user (/api/auth/me): $e');
-      return null;
+      return _storage.user;
     } finally {
       isLoading.value = false;
     }
