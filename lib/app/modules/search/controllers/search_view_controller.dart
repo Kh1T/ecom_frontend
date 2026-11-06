@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../data/services/cart_service.dart';
 import '../../home/controllers/home_controller.dart';
 import '../../products/controllers/products_controller.dart';
 
@@ -111,7 +112,13 @@ class SearchViewController extends GetxController {
     }
   }
 
-  void addToCart(Product product) {
+  Future<void> addToCart(Product product) async {
+    final cartService =
+        Get.isRegistered<CartService>() ? Get.find<CartService>() : null;
+    if (cartService != null) {
+      await cartService.addItem(product);
+    }
+
     Get.snackbar(
       'Added to Cart',
       '${product.name} added to your cart',

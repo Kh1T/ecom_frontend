@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../data/services/cart_service.dart';
 import '../../../data/services/user_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../products/controllers/products_controller.dart';
@@ -55,7 +56,7 @@ class HomeController extends GetxController {
       price: 99.0,
       stockQuantity: 60,
       sku: 'CMF-WATCH-3PRO',
-      imageUrls: ['assets/images/cmf_watch_3_pro.png'],
+      imageUrls: ['assets/images/phone_4a_pro.png'],
     ),
     Product(
       id: 6,
@@ -65,7 +66,7 @@ class HomeController extends GetxController {
       price: 79.0,
       stockQuantity: 45,
       sku: 'CMF-HEADPHONE-PRO',
-      imageUrls: ['assets/images/cmf_headphone_pro.png'],
+      imageUrls: ['assets/images/phone_3a_lite.png'],
     ),
     Product(
       id: 3,
@@ -180,7 +181,13 @@ class HomeController extends GetxController {
     }
   }
 
-  void addToCart(Product product) {
+  Future<void> addToCart(Product product) async {
+    final cartService =
+        Get.isRegistered<CartService>() ? Get.find<CartService>() : null;
+    if (cartService != null) {
+      await cartService.addItem(product);
+    }
+
     Get.snackbar(
       'Added to Cart',
       '${product.name} added to your cart',
@@ -213,11 +220,7 @@ class HomeController extends GetxController {
         break;
       case 3:
         // Cart
-        Get.snackbar(
-          'Cart',
-          'Cart feature coming soon',
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        Get.toNamed(Routes.CART);
         break;
       case 4:
         // Profile
