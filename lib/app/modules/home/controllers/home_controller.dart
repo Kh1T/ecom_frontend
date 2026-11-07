@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/services/cart_service.dart';
-import '../../../data/services/user_service.dart';
 import '../../../data/services/wishlist_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../products/controllers/products_controller.dart';
@@ -219,18 +218,7 @@ class HomeController extends GetxController {
         break;
       case 4:
         // Profile
-        final userService =
-            Get.isRegistered<UserService>() ? Get.find<UserService>() : null;
-        if (userService != null && userService.isLoggedIn) {
-          final user = userService.currentUser.value;
-          Get.snackbar(
-            'Profile',
-            'Signed in as ${user?.fullName ?? user?.email ?? 'User'}',
-            snackPosition: SnackPosition.BOTTOM,
-          );
-        } else {
-          Get.toNamed(Routes.AUTHENTICATION);
-        }
+        Get.toNamed(Routes.PROFILE);
         break;
     }
   }
