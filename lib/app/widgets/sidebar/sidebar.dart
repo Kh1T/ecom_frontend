@@ -138,8 +138,8 @@ class Sidebar extends StatelessWidget {
           const Divider(),
           if (userService != null)
             Obx(() {
-              final isLoggedIn =
-                  userService.isLoggedIn && userService.currentUser.value != null;
+              final user = userService.currentUser.value;
+              final isLoggedIn = userService.isLoggedIn && user != null;
               if (isLoggedIn) {
                 return ListTile(
                   leading: const Icon(Icons.logout),
