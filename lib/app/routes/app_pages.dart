@@ -18,6 +18,8 @@ import '../modules/products/bindings/products_binding.dart';
 import '../modules/products/views/products_view.dart';
 import '../modules/search/bindings/search_binding.dart';
 import '../modules/search/views/search_view.dart';
+import '../modules/wishlist/bindings/wishlist_binding.dart';
+import '../modules/wishlist/views/wishlist_view.dart';
 
 part 'app_routes.dart';
 
@@ -71,6 +73,11 @@ class AppPages {
     GetPage(
       name: _Paths.ORDER_SUCCESS,
       page: () => const OrderSuccessView(),
+    ),
+    GetPage(
+      name: _Paths.WISHLIST,
+      page: () => const WishlistView(),
+      binding: WishlistBinding(),
     ),
   ];
 }

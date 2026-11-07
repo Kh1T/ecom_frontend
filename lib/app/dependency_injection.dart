@@ -4,6 +4,7 @@ import 'data/providers/api_provider.dart';
 import 'data/services/location_service.dart';
 import 'data/services/storage_service.dart';
 import 'data/services/user_service.dart';
+import 'data/services/wishlist_service.dart';
 
 class DependencyInjection {
   static Future<void> init() async {
@@ -13,6 +14,8 @@ class DependencyInjection {
       ApiProvider(Get.find<StorageService>()),
       permanent: true,
     );
+    final wishlist = await WishlistService().init();
+    Get.put<WishlistService>(wishlist, permanent: true);
     Get.put<LocationService>(LocationService(), permanent: true);
     Get.put<UserService>(UserService(), permanent: true);
   }

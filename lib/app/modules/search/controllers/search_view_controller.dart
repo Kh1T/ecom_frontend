@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/services/cart_service.dart';
+import '../../../data/services/wishlist_service.dart';
 import '../../home/controllers/home_controller.dart';
 import '../../products/controllers/products_controller.dart';
 
@@ -11,7 +12,6 @@ class SearchViewController extends GetxController {
   final searchQuery = ''.obs;
   final selectedCategory = 'All'.obs;
   final selectedSort = 'default'.obs;
-  final favorites = <int>{}.obs;
 
   ProductsController? get _productsController =>
       Get.isRegistered<ProductsController>()
@@ -21,12 +21,14 @@ class SearchViewController extends GetxController {
   HomeController? get _homeController =>
       Get.isRegistered<HomeController>() ? Get.find<HomeController>() : null;
 
+  WishlistService? get _wishlist =>
+      Get.isRegistered<WishlistService>() ? Get.find<WishlistService>() : null;
+
   @override
   void onInit() {
     super.onInit();
     final hc = _homeController;
     if (hc != null) {
-      favorites.assignAll(hc.favorites);
       if (hc.searchQuery.value.isNotEmpty) {
         searchQuery.value = hc.searchQuery.value;
         searchController.text = hc.searchQuery.value;
@@ -94,22 +96,10 @@ class SearchViewController extends GetxController {
     selectedSort.value = sort;
   }
 
-  bool isFavorite(int productId) => favorites.contains(productId);
+  bool isFavorite(int productId) => _wishlist?.isFavorite(productId) ?? false;
 
   void toggleFavorite(int productId) {
-    if (favorites.contains(productId)) {
-      favorites.remove(productId);
-    } else {
-      favorites.add(productId);
-    }
-    final hc = _homeController;
-    if (hc != null) {
-      if (favorites.contains(productId)) {
-        hc.favorites.add(productId);
-      } else {
-        hc.favorites.remove(productId);
-      }
-    }
+    _wishlist?.toggle(productId);
   }
 
   Future<void> addToCart(Product product) async {

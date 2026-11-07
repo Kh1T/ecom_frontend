@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../data/services/cart_service.dart';
 import '../../../data/services/user_service.dart';
+import '../../../data/services/wishlist_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../products/controllers/products_controller.dart';
 
@@ -13,7 +14,6 @@ class HomeController extends GetxController {
   final searchQuery = ''.obs;
   final selectedSort = 'default'.obs;
   final bottomNavIndex = 0.obs;
-  final favorites = <int>{}.obs;
   final localSelectedCategory = 'All'.obs;
 
   @override
@@ -171,14 +171,13 @@ class HomeController extends GetxController {
     searchQuery.value = value;
   }
 
-  bool isFavorite(int productId) => favorites.contains(productId);
+  WishlistService? get _wishlist =>
+      Get.isRegistered<WishlistService>() ? Get.find<WishlistService>() : null;
+
+  bool isFavorite(int productId) => _wishlist?.isFavorite(productId) ?? false;
 
   void toggleFavorite(int productId) {
-    if (favorites.contains(productId)) {
-      favorites.remove(productId);
-    } else {
-      favorites.add(productId);
-    }
+    _wishlist?.toggle(productId);
   }
 
   Future<void> addToCart(Product product) async {
@@ -212,11 +211,7 @@ class HomeController extends GetxController {
         break;
       case 2:
         // Favorites
-        Get.snackbar(
-          'Favorites',
-          '${favorites.length} item(s) in favorites',
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        Get.toNamed(Routes.WISHLIST);
         break;
       case 3:
         // Cart

@@ -4,6 +4,7 @@ import '../../../data/providers/api_provider.dart';
 import '../../../data/services/cart_service.dart';
 import '../../../data/services/storage_service.dart';
 import '../../../data/services/user_service.dart';
+import '../../../data/services/wishlist_service.dart';
 import '../../products/controllers/products_controller.dart';
 import '../controllers/home_controller.dart';
 
@@ -21,6 +22,9 @@ class HomeBinding extends Bindings {
     }
     if (!Get.isRegistered<CartService>()) {
       Get.putAsync<CartService>(() => CartService().init());
+    }
+    if (!Get.isRegistered<WishlistService>()) {
+      Get.putAsync<WishlistService>(() => WishlistService().init());
     }
     if (!Get.isRegistered<ProductsController>()) {
       Get.lazyPut<ProductsController>(() => ProductsController());
