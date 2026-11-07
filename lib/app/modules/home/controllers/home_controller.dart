@@ -207,7 +207,7 @@ class HomeController extends GetxController {
         break;
       case 1:
         // Products / Categories
-        Get.toNamed(Routes.PRODUCTS);
+        Get.toNamed(Routes.CATEGORIES);
         break;
       case 2:
         // Favorites
