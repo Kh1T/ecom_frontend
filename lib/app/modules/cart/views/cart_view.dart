@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/cart_controller.dart';
 
 class CartView extends GetView<CartController> {
@@ -107,7 +108,7 @@ class CartView extends GetView<CartController> {
                             width: double.infinity,
                             height: 56,
                             child: ElevatedButton(
-                              onPressed: controller.checkout,
+                              onPressed: () => Get.toNamed(Routes.CHECKOUT),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.black,
                                 foregroundColor: Colors.white,

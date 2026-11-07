@@ -412,34 +412,18 @@ class HomeView extends GetView<HomeController> {
         color: Colors.white,
         child: SafeArea(
           top: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _navItem(0, Icons.home_outlined, active == 0),
-                    _navItem(1, Icons.grid_view_rounded, active == 1),
-                    _navItem(2, Icons.favorite_border_rounded, active == 2),
-                    _navItem(3, Icons.shopping_bag_outlined, active == 3),
-                    _navItem(4, Icons.person_outline_rounded, active == 4),
-                  ],
-                ),
-              ),
-              // iOS Home Indicator pill
-              Container(
-                margin: const EdgeInsets.only(top: 6, bottom: 6),
-                width: 135,
-                height: 4.5,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _navItem(0, Icons.home_outlined, active == 0),
+                _navItem(1, Icons.grid_view_rounded, active == 1),
+                _navItem(2, Icons.favorite_border_rounded, active == 2),
+                _navItem(3, Icons.shopping_bag_outlined, active == 3),
+                _navItem(4, Icons.person_outline_rounded, active == 4),
+              ],
+            ),
           ),
         ),
       );
