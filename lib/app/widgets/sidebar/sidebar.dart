@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../data/services/user_service.dart';
+import '../../modules/dashboard/controllers/language_controller.dart';
 import '../../routes/app_pages.dart';
 
 class Sidebar extends StatelessWidget {
