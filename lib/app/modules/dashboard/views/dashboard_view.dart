@@ -5,11 +5,14 @@ import 'package:get/get.dart';
 import '../../../widgets/sidebar/sidebar.dart';
 import '../../../theme/app_theme.dart';
 import '../controllers/dashboard_controller.dart';
+import '../controllers/language_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
   @override
   Widget build(BuildContext context) {
+    final langController = Get.find<LanguageController>();
+
     return Scaffold(
       appBar: AppBar(title: const Text('Dashboard')),
       drawer: const Sidebar(),
