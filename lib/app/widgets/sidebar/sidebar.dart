@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../data/services/user_service.dart';
+import '../../modules/dashboard/controllers/language_controller.dart';
 import '../../routes/app_pages.dart';
 
 class Sidebar extends StatelessWidget {
@@ -130,6 +131,31 @@ class Sidebar extends StatelessWidget {
                 selected: Get.currentRoute == Routes.ADMIN,
                 onTap: () {
                   Get.offAllNamed(Routes.ADMIN);
+                },
+              );
+            })
+          else
+            const SizedBox.shrink(),
+          const Divider(),
+          // Language switcher
+          if (Get.isRegistered<LanguageController>())
+            Obx(() {
+              final langController = Get.find<LanguageController>();
+              final isEn = langController.isEnglish;
+              return ListTile(
+                leading: const Icon(Icons.language),
+                title: Text('SIDEBAR_LANGUAGE'.tr),
+                trailing: Text(
+                  isEn ? 'EN' : 'KH',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.indigo,
+                  ),
+                ),
+                onTap: () {
+                  langController.changeLanguage(
+                    isEn ? 'km_KH' : 'en_US',
+                  );
                 },
               );
             })
