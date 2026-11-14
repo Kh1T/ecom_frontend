@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../data/services/wishlist_service.dart';
+import '../../../theme/app_theme.dart';
 import '../../../widgets/sidebar/sidebar.dart';
 import '../../products/controllers/products_controller.dart';
 import '../controllers/home_controller.dart';
@@ -12,13 +14,13 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       drawer: const Sidebar(),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56),
         child: SafeArea(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             height: 56,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,7 +29,11 @@ class HomeView extends GetView<HomeController> {
                   builder: (context) => IconButton(
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
-                    icon: const Icon(Icons.menu, color: Colors.black, size: 26),
+                    icon: const Icon(
+                      Icons.menu_rounded,
+                      color: AppColors.textPrimary,
+                      size: 26,
+                    ),
                     onPressed: () => Scaffold.of(context).openDrawer(),
                   ),
                 ),
@@ -55,11 +61,14 @@ class HomeView extends GetView<HomeController> {
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) =>
                             const CircleAvatar(
-                          radius: 17,
-                          backgroundColor: Colors.black12,
-                          child: Icon(Icons.person,
-                              size: 20, color: Colors.black87),
-                        ),
+                              radius: 17,
+                              backgroundColor: Colors.black12,
+                              child: Icon(
+                                Icons.person,
+                                size: 20,
+                                color: Colors.black87,
+                              ),
+                            ),
                       ),
                     ),
                   ),
@@ -78,28 +87,25 @@ class HomeView extends GetView<HomeController> {
               onTap: () => Get.toNamed(Routes.SEARCH),
               behavior: HitTestBehavior.opaque,
               child: Container(
-                height: 48,
+                height: 50,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: const Color(0xFFC4C4C4),
-                    width: 1.2,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.surface,
+                  border: Border.all(color: AppColors.border),
+                  borderRadius: BorderRadius.circular(AppRadii.medium),
                 ),
                 child: Row(
                   children: const [
                     SizedBox(width: 12),
                     Icon(
                       Icons.search,
-                      color: Color(0xFF1C1C1E),
+                      color: AppColors.textSecondary,
                       size: 22,
                     ),
                     SizedBox(width: 10),
                     Text(
                       'Search',
                       style: TextStyle(
-                        color: Color(0xFF1C1C1E),
+                        color: AppColors.textSecondary,
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                       ),
@@ -120,8 +126,7 @@ class HomeView extends GetView<HomeController> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 scrollDirection: Axis.horizontal,
                 itemCount: categories.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(width: 12),
+                separatorBuilder: (context, index) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
                   final cat = categories[index];
                   final isSelected =
@@ -131,15 +136,17 @@ class HomeView extends GetView<HomeController> {
                     onTap: () => controller.selectCategory(cat),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 22, vertical: 8),
+                        horizontal: 22,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
-                        color:
-                            isSelected ? const Color(0xFFEE5D26) : Colors.white,
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.surface,
                         border: isSelected
                             ? null
-                            : Border.all(
-                                color: const Color(0xFFE2E2E6), width: 1.2),
-                        borderRadius: BorderRadius.circular(8),
+                            : Border.all(color: AppColors.border),
+                        borderRadius: BorderRadius.circular(AppRadii.small),
                       ),
                       alignment: Alignment.center,
                       child: Text(
@@ -147,9 +154,10 @@ class HomeView extends GetView<HomeController> {
                         style: TextStyle(
                           color: isSelected
                               ? Colors.white
-                              : const Color(0xFF9E9EA4),
-                          fontWeight:
-                              isSelected ? FontWeight.bold : FontWeight.w500,
+                              : AppColors.textSecondary,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.w500,
                           fontSize: 14,
                         ),
                       ),
@@ -176,12 +184,12 @@ class HomeView extends GetView<HomeController> {
               }
 
               return GridView.builder(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 36),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 36,
-                  childAspectRatio: 0.64,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.62,
                 ),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
@@ -207,50 +215,38 @@ class HomeView extends GetView<HomeController> {
           onTap: () => _showProductDetails(context, product),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(AppRadii.medium),
+              border: Border.all(color: AppColors.border),
             ),
-            padding: const EdgeInsets.fromLTRB(12, 10, 12, 22),
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Heart / Favorite Icon
                 Align(
                   alignment: Alignment.topRight,
-                  child: Obx(() {
-                    final isFav = controller.isFavorite(product.id);
-                    return GestureDetector(
-                      onTap: () => controller.toggleFavorite(product.id),
-                      behavior: HitTestBehavior.opaque,
-                      child: Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: Icon(
-                          isFav ? Icons.favorite : Icons.favorite_border_rounded,
-                          color: isFav ? Colors.red : const Color(0xFF1C1C1E),
-                          size: 20,
-                        ),
-                      ),
-                    );
-                  }),
+                  child: _buildFavoriteButton(product),
                 ),
 
                 const SizedBox(height: 2),
 
                 // Product Image
                 Expanded(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      child: _buildProductImage(
-                          product.firstImageUrl, product.name),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceMuted,
+                      borderRadius: BorderRadius.circular(AppRadii.small),
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: _buildProductImage(
+                          product.firstImageUrl,
+                          product.name,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -260,13 +256,13 @@ class HomeView extends GetView<HomeController> {
                 // Product Name
                 Text(
                   product.name,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 13.5,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF1C1C1E),
+                    color: AppColors.textPrimary,
                     letterSpacing: 0.1,
                   ),
                 ),
@@ -278,12 +274,11 @@ class HomeView extends GetView<HomeController> {
                   product.price % 1 == 0
                       ? '\$${product.price.toInt()}'
                       : '\$${product.price.toStringAsFixed(2)}',
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: const TextStyle(
                     fontSize: 13.5,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1C1C1E),
-                    decoration: TextDecoration.underline,
+                    color: AppColors.textPrimary,
                   ),
                 ),
 
@@ -295,22 +290,16 @@ class HomeView extends GetView<HomeController> {
 
         // Overlapping Black Squircle Bag Button
         Positioned(
-          bottom: -18,
+          right: 10,
+          bottom: 10,
           child: GestureDetector(
             onTap: () => controller.addToCart(product),
             child: Container(
-              width: 42,
-              height: 42,
+              width: 38,
+              height: 38,
               decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.18),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(AppRadii.small),
               ),
               child: const Icon(
                 Icons.shopping_bag_outlined,
@@ -322,6 +311,26 @@ class HomeView extends GetView<HomeController> {
         ),
       ],
     );
+  }
+
+  Widget _buildFavoriteButton(Product product) {
+    Widget button() {
+      final isFavorite = controller.isFavorite(product.id);
+      return GestureDetector(
+        onTap: () => controller.toggleFavorite(product.id),
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: const EdgeInsets.all(2),
+          child: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
+            color: isFavorite ? AppColors.danger : AppColors.textPrimary,
+            size: 20,
+          ),
+        ),
+      );
+    }
+
+    return Get.isRegistered<WishlistService>() ? Obx(button) : button();
   }
 
   Widget _buildProductImage(String? url, String name) {
@@ -374,8 +383,11 @@ class HomeView extends GetView<HomeController> {
                 border: Border.all(color: const Color(0xFF88A999), width: 2.5),
               ),
               child: const Center(
-                child: Icon(Icons.access_time_filled,
-                    size: 26, color: Colors.white),
+                child: Icon(
+                  Icons.access_time_filled,
+                  size: 26,
+                  color: Colors.white,
+                ),
               ),
             ),
             Container(
@@ -409,7 +421,10 @@ class HomeView extends GetView<HomeController> {
     return Obx(() {
       final active = controller.bottomNavIndex.value;
       return Container(
-        color: Colors.white,
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          border: Border(top: BorderSide(color: AppColors.border)),
+        ),
         child: SafeArea(
           top: false,
           child: Padding(
@@ -443,12 +458,12 @@ class HomeView extends GetView<HomeController> {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(icon, color: Colors.white, size: 24),
                 )
-              : Icon(icon, color: const Color(0xFF1C1C1E), size: 24),
+              : Icon(icon, color: AppColors.textSecondary, size: 24),
         ),
       ),
     );
@@ -490,7 +505,9 @@ class HomeView extends GetView<HomeController> {
                     child: SizedBox(
                       height: 180,
                       child: _buildProductImage(
-                          product.firstImageUrl, product.name),
+                        product.firstImageUrl,
+                        product.name,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -511,7 +528,9 @@ class HomeView extends GetView<HomeController> {
                       Text(
                         'Stock: ${product.stockQuantity}',
                         style: const TextStyle(
-                            fontSize: 14, color: Colors.grey),
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -525,8 +544,10 @@ class HomeView extends GetView<HomeController> {
                     const SizedBox(height: 12),
                     Text(
                       product.description!,
-                      style:
-                          const TextStyle(color: Colors.black87, height: 1.4),
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        height: 1.4,
+                      ),
                     ),
                   ],
                   const SizedBox(height: 20),

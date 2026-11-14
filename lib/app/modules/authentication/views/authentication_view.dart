@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../theme/app_theme.dart';
 import '../controllers/authentication_controller.dart';
 
 class AuthenticationView extends GetView<AuthenticationController> {
@@ -9,12 +10,12 @@ class AuthenticationView extends GetView<AuthenticationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Obx(
           () => SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+            padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -27,7 +28,7 @@ class AuthenticationView extends GetView<AuthenticationController> {
                       icon: const Icon(
                         Icons.arrow_back_ios_new,
                         size: 20,
-                        color: Colors.black,
+                        color: AppColors.textPrimary,
                       ),
                       onPressed: () => Get.back(),
                     ),
@@ -37,29 +38,36 @@ class AuthenticationView extends GetView<AuthenticationController> {
                   const SizedBox(height: 16),
 
                 // Header Title
-                Text(
-                  controller.isSignUp.value ? 'Create account' : 'Welcome back!',
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                    letterSpacing: -0.5,
-                    height: 1.15,
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(AppRadii.medium),
+                  ),
+                  child: const Icon(
+                    Icons.lock_outline_rounded,
+                    color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 24),
                 Text(
-                  controller.isSignUp.value ? 'Sign Up' : 'Sign In',
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                    letterSpacing: -0.5,
-                    height: 1.15,
+                  controller.isSignUp.value
+                      ? 'Create your account'
+                      : 'Welcome back',
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  controller.isSignUp.value
+                      ? 'Enter your details to get started.'
+                      : 'Sign in to continue to your account.',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textSecondary,
                   ),
                 ),
 
-                const SizedBox(height: 36),
+                const SizedBox(height: 32),
 
                 // Name field (Sign Up only)
                 if (controller.isSignUp.value) ...[
@@ -119,7 +127,7 @@ class AuthenticationView extends GetView<AuthenticationController> {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                     ),
@@ -143,12 +151,12 @@ class AuthenticationView extends GetView<AuthenticationController> {
                             }
                           },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
+                      backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
-                      disabledBackgroundColor: Colors.black54,
+                      disabledBackgroundColor: AppColors.textSecondary,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppRadii.medium),
                       ),
                     ),
                     child: controller.isLoading.value
@@ -235,12 +243,9 @@ class AuthenticationView extends GetView<AuthenticationController> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF3F4F6),
+                        color: AppColors.surfaceMuted,
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: const Color(0xFFE5E7EB),
-                          width: 1,
-                        ),
+                        border: Border.all(color: AppColors.border, width: 1),
                       ),
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
@@ -273,7 +278,10 @@ class AuthenticationView extends GetView<AuthenticationController> {
                     onTap: controller.toggleAuthMode,
                     behavior: HitTestBehavior.opaque,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 16.0,
+                      ),
                       child: RichText(
                         text: TextSpan(
                           text: controller.isSignUp.value
@@ -285,11 +293,13 @@ class AuthenticationView extends GetView<AuthenticationController> {
                           ),
                           children: [
                             TextSpan(
-                              text: controller.isSignUp.value ? 'Sign In' : 'Sign Up',
+                              text: controller.isSignUp.value
+                                  ? 'Sign In'
+                                  : 'Sign Up',
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           ],
@@ -324,7 +334,7 @@ class AuthenticationView extends GetView<AuthenticationController> {
       onSubmitted: onSubmitted,
       style: const TextStyle(
         fontSize: 15,
-        color: Colors.black,
+        color: AppColors.textPrimary,
         fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
@@ -334,17 +344,20 @@ class AuthenticationView extends GetView<AuthenticationController> {
           fontSize: 15,
           fontWeight: FontWeight.w400,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 18,
+        ),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.surface,
         suffixIcon: suffixIcon,
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFFE5E7EB), width: 1.2),
+          borderRadius: BorderRadius.circular(AppRadii.medium),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Colors.black, width: 1.4),
+          borderRadius: BorderRadius.circular(AppRadii.medium),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
       ),
     );
@@ -361,10 +374,10 @@ class AuthenticationView extends GetView<AuthenticationController> {
       child: OutlinedButton(
         onPressed: onTap,
         style: OutlinedButton.styleFrom(
-          backgroundColor: Colors.white,
-          side: const BorderSide(color: Color(0xFFE5E7EB), width: 1.2),
+          backgroundColor: AppColors.surface,
+          side: const BorderSide(color: AppColors.border),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppRadii.medium),
           ),
           elevation: 0,
         ),

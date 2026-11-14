@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../theme/app_theme.dart';
 import '../../../widgets/sidebar/sidebar.dart';
 import '../controllers/admin_controller.dart';
 
@@ -14,24 +15,24 @@ class AdminView extends GetView<AdminController> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isWide = constraints.maxWidth >= 800;
-        return isWide ? _buildDesktopLayout(context) : _buildMobileLayout(context);
+        return isWide
+            ? _buildDesktopLayout(context)
+            : _buildMobileLayout(context);
       },
     );
   }
 
   Widget _buildDesktopLayout(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Panel'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Admin workspace')),
       drawer: const Sidebar(),
       body: Row(
         children: [
           Obx(
             () => NavigationRail(
               extended: true,
-              minExtendedWidth: 200,
+              minExtendedWidth: 220,
+              groupAlignment: -0.85,
               selectedIndex: controller.selectedIndex.value,
               onDestinationSelected: controller.selectIndex,
               destinations: [
@@ -44,9 +45,7 @@ class AdminView extends GetView<AdminController> {
             ),
           ),
           const VerticalDivider(thickness: 1, width: 1),
-          Expanded(
-            child: _buildContent(context),
-          ),
+          Expanded(child: _buildContent(context)),
         ],
       ),
     );
@@ -54,10 +53,7 @@ class AdminView extends GetView<AdminController> {
 
   Widget _buildMobileLayout(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Panel'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Admin workspace')),
       drawer: const Sidebar(),
       body: _buildContent(context),
     );
@@ -69,8 +65,8 @@ class AdminView extends GetView<AdminController> {
         index: controller.selectedIndex.value,
         children: [
           _buildDashboard(context),
-          _buildPlaceholderList('Orders', Icons.shopping_cart),
-          _buildPlaceholderList('Users', Icons.people),
+          _buildPlaceholderList(context, 'Orders', Icons.shopping_cart),
+          _buildPlaceholderList(context, 'Users', Icons.people),
         ],
       ),
     );
@@ -82,9 +78,13 @@ class AdminView extends GetView<AdminController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Dashboard', style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 4),
           Text(
-            'Dashboard',
-            style: Theme.of(context).textTheme.headlineSmall,
+            'A concise overview of your commerce operations.',
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 24),
           Expanded(
@@ -97,12 +97,11 @@ class AdminView extends GetView<AdminController> {
                 children: [
                   for (final stat in controller.stats)
                     Card(
-                      elevation: 2,
                       child: InkWell(
                         onTap: stat['title'] == 'Products'
                             ? () => Get.toNamed(Routes.PRODUCTS)
                             : null,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppRadii.medium),
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Column(
@@ -112,18 +111,22 @@ class AdminView extends GetView<AdminController> {
                               Icon(
                                 stat['icon'] as IconData,
                                 size: 32,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: AppColors.textSecondary,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     stat['value'] as String,
-                                    style: Theme.of(context).textTheme.headlineMedium,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.headlineMedium,
                                   ),
                                   Text(
                                     stat['title'] as String,
-                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium,
                                   ),
                                 ],
                               ),
@@ -141,27 +144,42 @@ class AdminView extends GetView<AdminController> {
     );
   }
 
-  Widget _buildPlaceholderList(String title, IconData icon) {
+  Widget _buildPlaceholderList(
+    BuildContext context,
+    String title,
+    IconData icon,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(title, style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 4),
           Text(
-            title,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            'Manage and review $title in one place.',
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 16),
           Expanded(
             child: ListView.builder(
               itemCount: 10,
               itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    leading: Icon(icon),
-                    title: Text('$title item #${index + 1}'),
-                    subtitle: const Text('Placeholder details'),
-                    trailing: const Icon(Icons.chevron_right),
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Card(
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
+                      ),
+                      leading: Icon(icon),
+                      title: Text('$title item #${index + 1}'),
+                      subtitle: const Text('Placeholder details'),
+                      trailing: const Icon(Icons.chevron_right),
+                    ),
                   ),
                 );
               },
