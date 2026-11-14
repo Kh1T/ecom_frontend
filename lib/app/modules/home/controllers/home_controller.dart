@@ -19,9 +19,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     searchFocusNode.addListener(() {
-      if (searchFocusNode.hasFocus) {
-        isSearchActive.value = true;
-      }
+      isSearchActive.value = searchFocusNode.hasFocus;
     });
   }
 
@@ -91,8 +89,8 @@ class HomeController extends GetxController {
 
   ProductsController? get _productsController =>
       Get.isRegistered<ProductsController>()
-          ? Get.find<ProductsController>()
-          : null;
+      ? Get.find<ProductsController>()
+      : null;
 
   List<String> get categories {
     final set = <String>{'All', 'Accessories', 'Phones', 'Audios'};
@@ -121,16 +119,19 @@ class HomeController extends GetxController {
     var list = allProducts;
     if (selectedCategory != 'All') {
       list = list
-          .where((p) =>
-              p.category.toLowerCase() == selectedCategory.toLowerCase())
+          .where(
+            (p) => p.category.toLowerCase() == selectedCategory.toLowerCase(),
+          )
           .toList();
     }
     final query = searchQuery.value.trim().toLowerCase();
     if (query.isNotEmpty) {
       list = list
-          .where((p) =>
-              p.name.toLowerCase().contains(query) ||
-              (p.description ?? '').toLowerCase().contains(query))
+          .where(
+            (p) =>
+                p.name.toLowerCase().contains(query) ||
+                (p.description ?? '').toLowerCase().contains(query),
+          )
           .toList();
     }
     if (selectedSort.value == 'price_asc') {
@@ -170,6 +171,14 @@ class HomeController extends GetxController {
     searchQuery.value = value;
   }
 
+  void clearSearch() {
+    searchController.clear();
+    searchQuery.value = '';
+    if (!searchFocusNode.hasFocus) {
+      searchFocusNode.requestFocus();
+    }
+  }
+
   WishlistService? get _wishlist =>
       Get.isRegistered<WishlistService>() ? Get.find<WishlistService>() : null;
 
@@ -180,8 +189,9 @@ class HomeController extends GetxController {
   }
 
   Future<void> addToCart(Product product) async {
-    final cartService =
-        Get.isRegistered<CartService>() ? Get.find<CartService>() : null;
+    final cartService = Get.isRegistered<CartService>()
+        ? Get.find<CartService>()
+        : null;
     if (cartService != null) {
       await cartService.addItem(product);
     }
