@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../routes/app_pages.dart';
 import '../../../data/services/wishlist_service.dart';
 import '../../../theme/app_theme.dart';
 import '../../../widgets/sidebar/sidebar.dart';
@@ -80,41 +79,7 @@ class HomeView extends GetView<HomeController> {
       ),
       body: Column(
         children: [
-          // Search Bar (Tapping navigates to dedicated search page)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
-            child: GestureDetector(
-              onTap: () => Get.toNamed(Routes.SEARCH),
-              behavior: HitTestBehavior.opaque,
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  border: Border.all(color: AppColors.border),
-                  borderRadius: BorderRadius.circular(AppRadii.medium),
-                ),
-                child: Row(
-                  children: const [
-                    SizedBox(width: 12),
-                    Icon(
-                      Icons.search,
-                      color: AppColors.textSecondary,
-                      size: 22,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Search',
-                      style: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          _buildHomeSearch(context),
 
           // Categories Tabs
           Obx(() {
@@ -203,6 +168,114 @@ class HomeView extends GetView<HomeController> {
       ),
       bottomNavigationBar: _buildBottomNav(context),
     );
+  }
+
+  Widget _buildHomeSearch(BuildContext context) {
+    return Obx(() {
+      final isFocused = controller.isSearchActive.value;
+      final hasQuery = controller.searchQuery.value.trim().isNotEmpty;
+
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          height: 56,
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isFocused ? AppColors.primary : AppColors.border,
+              width: isFocused ? 1.4 : 1,
+            ),
+            boxShadow: isFocused
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.07),
+                      blurRadius: 16,
+                      offset: const Offset(0, 5),
+                    ),
+                  ]
+                : null,
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                margin: const EdgeInsets.only(left: 6),
+                decoration: BoxDecoration(
+                  color: isFocused ? AppColors.primary : AppColors.surfaceMuted,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.search_rounded,
+                  size: 21,
+                  color: isFocused ? Colors.white : AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TextField(
+                  controller: controller.searchController,
+                  focusNode: controller.searchFocusNode,
+                  onTap: controller.enterSearch,
+                  onChanged: controller.onSearchChanged,
+                  onSubmitted: (_) => controller.searchFocusNode.unfocus(),
+                  textInputAction: TextInputAction.search,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  decoration: const InputDecoration(
+                    hintText: 'Search phones, audio, accessories',
+                    hintStyle: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    filled: false,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(vertical: 17),
+                  ),
+                ),
+              ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 150),
+                child: hasQuery
+                    ? IconButton(
+                        key: const ValueKey('clear-search'),
+                        tooltip: 'Clear search',
+                        onPressed: controller.clearSearch,
+                        icon: Container(
+                          width: 26,
+                          height: 26,
+                          decoration: const BoxDecoration(
+                            color: AppColors.surfaceMuted,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.close_rounded,
+                            size: 16,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      )
+                    : const SizedBox(
+                        key: ValueKey('search-spacing'),
+                        width: 10,
+                      ),
+              ),
+              const SizedBox(width: 4),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   Widget _buildProductCard(BuildContext context, Product product) {
