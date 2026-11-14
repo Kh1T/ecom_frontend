@@ -149,6 +149,8 @@ class HomeView extends GetView<HomeController> {
               }
 
               return GridView.builder(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -184,18 +186,9 @@ class HomeView extends GetView<HomeController> {
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isFocused ? AppColors.primary : AppColors.border,
-              width: isFocused ? 1.4 : 1,
+              color: isFocused ? AppColors.textSecondary : AppColors.border,
+              width: isFocused ? 1.2 : 1,
             ),
-            boxShadow: isFocused
-                ? [
-                    BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.07),
-                      blurRadius: 16,
-                      offset: const Offset(0, 5),
-                    ),
-                  ]
-                : null,
           ),
           child: Row(
             children: [
@@ -204,13 +197,17 @@ class HomeView extends GetView<HomeController> {
                 height: 42,
                 margin: const EdgeInsets.only(left: 6),
                 decoration: BoxDecoration(
-                  color: isFocused ? AppColors.primary : AppColors.surfaceMuted,
+                  color: isFocused
+                      ? AppColors.surfaceMuted
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   Icons.search_rounded,
                   size: 21,
-                  color: isFocused ? Colors.white : AppColors.textSecondary,
+                  color: isFocused
+                      ? AppColors.textPrimary
+                      : AppColors.textSecondary,
                 ),
               ),
               const SizedBox(width: 10),
@@ -218,9 +215,11 @@ class HomeView extends GetView<HomeController> {
                 child: TextField(
                   controller: controller.searchController,
                   focusNode: controller.searchFocusNode,
+                  autofocus: false,
                   onTap: controller.enterSearch,
+                  onTapOutside: (_) => controller.dismissSearch(),
                   onChanged: controller.onSearchChanged,
-                  onSubmitted: (_) => controller.searchFocusNode.unfocus(),
+                  onSubmitted: (_) => controller.dismissSearch(),
                   textInputAction: TextInputAction.search,
                   keyboardType: TextInputType.text,
                   autocorrect: false,
