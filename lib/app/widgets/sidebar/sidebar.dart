@@ -131,35 +131,27 @@ class Sidebar extends StatelessWidget {
   Widget _buildBrand() {
     return Row(
       children: [
-        Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: const Icon(
-            Icons.memory_rounded,
-            color: Colors.white,
-            size: 22,
-          ),
-        ),
-        const SizedBox(width: 12),
-        const Expanded(
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'ECOM',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.8,
-                  color: AppColors.textPrimary,
+              Image.asset(
+                'assets/images/logo.png',
+                height: 20,
+                fit: BoxFit.contain,
+                alignment: Alignment.centerLeft,
+                errorBuilder: (context, error, stackTrace) => const Text(
+                  'ECOM',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.8,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
-              SizedBox(height: 1),
-              Text(
+              const SizedBox(height: 4),
+              const Text(
                 'Premium digital store',
                 style: TextStyle(
                   fontSize: 11.5,
@@ -202,6 +194,7 @@ class Sidebar extends StatelessWidget {
         detail: user.email,
         initial: name.isNotEmpty ? name[0].toUpperCase() : 'U',
         badge: user.role.isNotEmpty ? user.role : 'Member',
+        avatarAsset: 'assets/images/avatar.png',
         onTap: () => Get.toNamed(Routes.PROFILE),
       );
     });
@@ -213,6 +206,7 @@ class Sidebar extends StatelessWidget {
       detail: 'Sign in for orders and saved items',
       initial: 'E',
       badge: 'Guest',
+      avatarAsset: 'assets/images/avatar.png',
       onTap: () => Get.toNamed(Routes.AUTHENTICATION),
     );
   }
@@ -274,6 +268,7 @@ class _AccountCard extends StatelessWidget {
     required this.initial,
     required this.badge,
     required this.onTap,
+    this.avatarAsset,
   });
 
   final String name;
@@ -281,6 +276,7 @@ class _AccountCard extends StatelessWidget {
   final String initial;
   final String badge;
   final VoidCallback onTap;
+  final String? avatarAsset;
 
   @override
   Widget build(BuildContext context) {
@@ -295,23 +291,27 @@ class _AccountCard extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 44,
-                height: 44,
-                alignment: Alignment.center,
+                width: 46,
+                height: 46,
                 decoration: BoxDecoration(
+                  shape: BoxShape.circle,
                   color: Colors.white.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.14),
+                    color: Colors.white.withValues(alpha: 0.18),
+                    width: 1.5,
                   ),
                 ),
-                child: Text(
-                  initial,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                  ),
+                child: ClipOval(
+                  child: avatarAsset == null
+                      ? Center(child: _AvatarFallback(initial: initial))
+                      : Image.asset(
+                          avatarAsset!,
+                          width: 46,
+                          height: 46,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Center(child: _AvatarFallback(initial: initial)),
+                        ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -376,6 +376,24 @@ class _AccountCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _AvatarFallback extends StatelessWidget {
+  const _AvatarFallback({required this.initial});
+
+  final String initial;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      initial,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w800,
       ),
     );
   }
