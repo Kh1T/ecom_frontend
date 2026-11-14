@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../theme/app_theme.dart';
 import '../../products/controllers/products_controller.dart';
 import '../controllers/search_view_controller.dart';
 
@@ -10,7 +11,7 @@ class SearchView extends GetView<SearchViewController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -35,12 +36,9 @@ class SearchView extends GetView<SearchViewController> {
                     child: Container(
                       height: 48,
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: const Color(0xFFC4C4C4),
-                          width: 1.2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
+                        color: AppColors.surface,
+                        border: Border.all(color: AppColors.border),
+                        borderRadius: BorderRadius.circular(AppRadii.medium),
                       ),
                       child: Row(
                         children: [
@@ -70,16 +68,21 @@ class SearchView extends GetView<SearchViewController> {
                               ),
                             ),
                           ),
-                          Obx(() => controller.searchQuery.value.isNotEmpty
-                              ? IconButton(
-                                  icon: const Icon(Icons.close,
-                                      size: 18, color: Colors.grey),
-                                  onPressed: () {
-                                    controller.searchController.clear();
-                                    controller.onSearchChanged('');
-                                  },
-                                )
-                              : const SizedBox.shrink()),
+                          Obx(
+                            () => controller.searchQuery.value.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(
+                                      Icons.close,
+                                      size: 18,
+                                      color: Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      controller.searchController.clear();
+                                      controller.onSearchChanged('');
+                                    },
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
                         ],
                       ),
                     ),
@@ -121,16 +124,17 @@ class SearchView extends GetView<SearchViewController> {
                       onTap: () => controller.selectCategory(cat),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 22, vertical: 8),
+                          horizontal: 22,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? const Color(0xFFEE5D26)
-                              : Colors.white,
+                              ? AppColors.primary
+                              : AppColors.surface,
                           border: isSelected
                               ? null
-                              : Border.all(
-                                  color: const Color(0xFFE2E2E6), width: 1.2),
-                          borderRadius: BorderRadius.circular(8),
+                              : Border.all(color: AppColors.border),
+                          borderRadius: BorderRadius.circular(AppRadii.small),
                         ),
                         alignment: Alignment.center,
                         child: Text(
@@ -138,7 +142,7 @@ class SearchView extends GetView<SearchViewController> {
                           style: TextStyle(
                             color: isSelected
                                 ? Colors.white
-                                : const Color(0xFF9E9EA4),
+                                : AppColors.textSecondary,
                             fontWeight: isSelected
                                 ? FontWeight.bold
                                 : FontWeight.w500,
@@ -171,9 +175,9 @@ class SearchView extends GetView<SearchViewController> {
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 36),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 36,
-                    childAspectRatio: 0.64,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.62,
                   ),
                   itemCount: products.length,
                   itemBuilder: (context, index) {
@@ -199,15 +203,9 @@ class SearchView extends GetView<SearchViewController> {
           onTap: () => _showProductDetails(context, product),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(AppRadii.medium),
+              border: Border.all(color: AppColors.border),
             ),
             padding: const EdgeInsets.fromLTRB(12, 10, 12, 22),
             child: Column(
@@ -224,7 +222,9 @@ class SearchView extends GetView<SearchViewController> {
                       child: Padding(
                         padding: const EdgeInsets.all(2),
                         child: Icon(
-                          isFav ? Icons.favorite : Icons.favorite_border_rounded,
+                          isFav
+                              ? Icons.favorite
+                              : Icons.favorite_border_rounded,
                           color: isFav ? Colors.red : const Color(0xFF1C1C1E),
                           size: 20,
                         ),
@@ -240,9 +240,13 @@ class SearchView extends GetView<SearchViewController> {
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       child: _buildProductImage(
-                          product.firstImageUrl, product.name),
+                        product.firstImageUrl,
+                        product.name,
+                      ),
                     ),
                   ),
                 ),
@@ -294,11 +298,11 @@ class SearchView extends GetView<SearchViewController> {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: AppColors.primary,
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.18),
+                    color: Colors.black.withValues(alpha: 0.18),
                     blurRadius: 8,
                     offset: const Offset(0, 3),
                   ),
@@ -366,8 +370,11 @@ class SearchView extends GetView<SearchViewController> {
                 border: Border.all(color: const Color(0xFF88A999), width: 2.5),
               ),
               child: const Center(
-                child: Icon(Icons.access_time_filled,
-                    size: 26, color: Colors.white),
+                child: Icon(
+                  Icons.access_time_filled,
+                  size: 26,
+                  color: Colors.white,
+                ),
               ),
             ),
             Container(
@@ -401,7 +408,7 @@ class SearchView extends GetView<SearchViewController> {
     Get.bottomSheet(
       Container(
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -439,8 +446,10 @@ class SearchView extends GetView<SearchViewController> {
                       controller.selectCategory('All');
                       Get.back();
                     },
-                    child: const Text('Reset',
-                        style: TextStyle(color: Colors.black54)),
+                    child: const Text(
+                      'Reset',
+                      style: TextStyle(color: Colors.black54),
+                    ),
                   ),
                 ],
               ),
@@ -456,14 +465,26 @@ class SearchView extends GetView<SearchViewController> {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    _filterChip('Default', sort == 'default',
-                        () => controller.setSort('default')),
-                    _filterChip('Price: Low to High', sort == 'price_asc',
-                        () => controller.setSort('price_asc')),
-                    _filterChip('Price: High to Low', sort == 'price_desc',
-                        () => controller.setSort('price_desc')),
-                    _filterChip('Name: A-Z', sort == 'name_asc',
-                        () => controller.setSort('name_asc')),
+                    _filterChip(
+                      'Default',
+                      sort == 'default',
+                      () => controller.setSort('default'),
+                    ),
+                    _filterChip(
+                      'Price: Low to High',
+                      sort == 'price_asc',
+                      () => controller.setSort('price_asc'),
+                    ),
+                    _filterChip(
+                      'Price: High to Low',
+                      sort == 'price_desc',
+                      () => controller.setSort('price_desc'),
+                    ),
+                    _filterChip(
+                      'Name: A-Z',
+                      sort == 'name_asc',
+                      () => controller.setSort('name_asc'),
+                    ),
                   ],
                 );
               }),
@@ -479,10 +500,12 @@ class SearchView extends GetView<SearchViewController> {
                   spacing: 8,
                   runSpacing: 8,
                   children: controller.categories.map((cat) {
-                    final isSel =
-                        cat.toLowerCase() == currentCat.toLowerCase();
+                    final isSel = cat.toLowerCase() == currentCat.toLowerCase();
                     return _filterChip(
-                        cat, isSel, () => controller.selectCategory(cat));
+                      cat,
+                      isSel,
+                      () => controller.selectCategory(cat),
+                    );
                   }).toList(),
                 );
               }),
@@ -499,8 +522,10 @@ class SearchView extends GetView<SearchViewController> {
                     ),
                   ),
                   onPressed: () => Get.back(),
-                  child: const Text('Apply',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    'Apply',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
@@ -517,10 +542,10 @@ class SearchView extends GetView<SearchViewController> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.black : Colors.white,
+          color: isSelected ? AppColors.primary : AppColors.surface,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isSelected ? Colors.black : const Color(0xFFE2E2E6),
+            color: isSelected ? AppColors.primary : AppColors.border,
             width: 1.2,
           ),
         ),
@@ -572,7 +597,9 @@ class SearchView extends GetView<SearchViewController> {
                     child: SizedBox(
                       height: 180,
                       child: _buildProductImage(
-                          product.firstImageUrl, product.name),
+                        product.firstImageUrl,
+                        product.name,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -593,7 +620,9 @@ class SearchView extends GetView<SearchViewController> {
                       Text(
                         'Stock: ${product.stockQuantity}',
                         style: const TextStyle(
-                            fontSize: 14, color: Colors.grey),
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -607,8 +636,10 @@ class SearchView extends GetView<SearchViewController> {
                     const SizedBox(height: 12),
                     Text(
                       product.description!,
-                      style:
-                          const TextStyle(color: Colors.black87, height: 1.4),
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        height: 1.4,
+                      ),
                     ),
                   ],
                   const SizedBox(height: 20),

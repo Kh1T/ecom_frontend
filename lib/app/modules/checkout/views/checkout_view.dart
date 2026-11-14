@@ -1,51 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../theme/app_theme.dart';
+import '../../../widgets/app_ui.dart';
 import '../controllers/checkout_controller.dart';
 
 class CheckoutView extends GetView<CheckoutController> {
   const CheckoutView({super.key});
 
-  static const Color _muted = Color(0xFF9CA3AF);
-  static const Color _fieldBg = Color(0xFFF9FAFB);
-  static const Color _border = Color(0xFFE5E7EB);
+  static const Color _muted = AppColors.textSecondary;
+  static const Color _fieldBg = AppColors.surfaceMuted;
+  static const Color _border = AppColors.border;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(
-              height: 56,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Text(
-                    'Checkout',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      padding: const EdgeInsets.only(left: 8),
-                      constraints: const BoxConstraints(),
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                      onPressed: () => Get.back(),
-                    ),
-                  ),
-                ],
-              ),
+            const AppPageHeader(
+              title: 'Checkout',
+              subtitle: 'Delivery and payment',
             ),
             Expanded(
               child: ListView(
@@ -60,8 +36,9 @@ class CheckoutView extends GetView<CheckoutController> {
                   const SizedBox(height: 24),
                   const _SectionTitle('Payment Method'),
                   const SizedBox(height: 12),
-                  ...controller.paymentMethods
-                      .map((method) => _buildPaymentOption(method)),
+                  ...controller.paymentMethods.map(
+                    (method) => _buildPaymentOption(method),
+                  ),
                 ],
               ),
             ),
@@ -74,8 +51,10 @@ class CheckoutView extends GetView<CheckoutController> {
 
   Widget _buildOrderSummary() {
     return Obx(() {
-      final count = controller.cart.cartItems
-          .fold<int>(0, (sum, item) => sum + item.quantity.value);
+      final count = controller.cart.cartItems.fold<int>(
+        0,
+        (sum, item) => sum + item.quantity.value,
+      );
       return Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -91,8 +70,11 @@ class CheckoutView extends GetView<CheckoutController> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: const Icon(Icons.shopping_bag_outlined,
-                  size: 22, color: Colors.black),
+              child: const Icon(
+                Icons.shopping_bag_outlined,
+                size: 22,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -221,8 +203,10 @@ class CheckoutView extends GetView<CheckoutController> {
             hintStyle: const TextStyle(fontSize: 14, color: _muted),
             filled: true,
             fillColor: _fieldBg,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 14,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide: BorderSide.none,
@@ -253,7 +237,7 @@ class CheckoutView extends GetView<CheckoutController> {
             duration: const Duration(milliseconds: 150),
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: selected ? _fieldBg : Colors.white,
+              color: selected ? _fieldBg : AppColors.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: selected ? Colors.black : _border,
@@ -266,7 +250,7 @@ class CheckoutView extends GetView<CheckoutController> {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: selected ? Colors.black : _fieldBg,
+                    color: selected ? AppColors.primary : _fieldBg,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -313,7 +297,7 @@ class CheckoutView extends GetView<CheckoutController> {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: selected ? Colors.black : _border,
+          color: selected ? AppColors.primary : _border,
           width: 2,
         ),
       ),
@@ -323,7 +307,7 @@ class CheckoutView extends GetView<CheckoutController> {
                 width: 10,
                 height: 10,
                 decoration: const BoxDecoration(
-                  color: Colors.black,
+                  color: AppColors.primary,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -337,7 +321,10 @@ class CheckoutView extends GetView<CheckoutController> {
       final placing = controller.isPlacingOrder.value;
       return Container(
         padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          border: Border(top: BorderSide(color: AppColors.border)),
+        ),
         child: SizedBox(
           width: double.infinity,
           height: 56,

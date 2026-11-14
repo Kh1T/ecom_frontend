@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/sidebar/sidebar.dart';
+import '../../../theme/app_theme.dart';
 import '../controllers/products_controller.dart';
 
 class ProductsView extends GetView<ProductsController> {
@@ -11,23 +12,33 @@ class ProductsView extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Products'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Product management')),
       drawer: const Sidebar(),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Products',
-                  style: Theme.of(context).textTheme.headlineSmall,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Products',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Manage catalog details, inventory, and media.',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(width: 12),
                 ElevatedButton.icon(
                   onPressed: () => _showProductDialog(context),
                   icon: const Icon(Icons.add),
@@ -51,25 +62,26 @@ class ProductsView extends GetView<ProductsController> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: Obx(
-                () {
-                  if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (controller.filteredProducts.isEmpty) {
-                    return const Center(child: Text('No products found'));
-                  }
-                  return RefreshIndicator(
-                    onRefresh: controller.fetchProducts,
-                    child: ListView.builder(
-                      itemCount: controller.filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        final product = controller.filteredProducts[index];
-                        return Card(
-                          margin: const EdgeInsets.symmetric(vertical: 6),
-                          elevation: 1.5,
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (controller.filteredProducts.isEmpty) {
+                  return const Center(child: Text('No products found'));
+                }
+                return RefreshIndicator(
+                  onRefresh: controller.fetchProducts,
+                  child: ListView.builder(
+                    itemCount: controller.filteredProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = controller.filteredProducts[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Card(
                           child: InkWell(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(
+                              AppRadii.medium,
+                            ),
                             onTap: () => _showProductDetails(context, product),
                             child: Padding(
                               padding: const EdgeInsets.all(12),
@@ -98,18 +110,19 @@ class ProductsView extends GetView<ProductsController> {
                                             Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
-                                                horizontal: 6,
-                                                vertical: 2,
-                                              ),
+                                                    horizontal: 6,
+                                                    vertical: 2,
+                                                  ),
                                               decoration: BoxDecoration(
-                                                color: Colors.indigo.shade50,
+                                                color: AppColors.surfaceMuted,
                                                 borderRadius:
                                                     BorderRadius.circular(4),
                                               ),
                                               child: Text(
                                                 product.category,
                                                 style: TextStyle(
-                                                  color: Colors.indigo.shade800,
+                                                  color:
+                                                      AppColors.textSecondary,
                                                   fontSize: 11,
                                                   fontWeight: FontWeight.w600,
                                                 ),
@@ -134,7 +147,9 @@ class ProductsView extends GetView<ProductsController> {
                                           ],
                                         ),
                                         if (product.description != null &&
-                                            product.description!.isNotEmpty) ...[
+                                            product
+                                                .description!
+                                                .isNotEmpty) ...[
                                           const SizedBox(height: 4),
                                           Text(
                                             product.description!,
@@ -151,8 +166,7 @@ class ProductsView extends GetView<ProductsController> {
                                   ),
                                   const SizedBox(width: 8),
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
                                         '\$${product.price.toStringAsFixed(2)}',
@@ -174,8 +188,8 @@ class ProductsView extends GetView<ProductsController> {
                                                 VisualDensity.compact,
                                             onPressed: () => controller
                                                 .pickAndUploadProductImage(
-                                              product.id,
-                                            ),
+                                                  product.id,
+                                                ),
                                           ),
                                           IconButton(
                                             icon: const Icon(
@@ -207,12 +221,12 @@ class ProductsView extends GetView<ProductsController> {
                               ),
                             ),
                           ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }),
             ),
           ],
         ),
@@ -231,7 +245,7 @@ class ProductsView extends GetView<ProductsController> {
           child: Container(
             width: 64,
             height: 64,
-            color: Colors.grey.shade100,
+            color: AppColors.surfaceMuted,
             child: hasImage
                 ? Image.network(
                     product.firstImageUrl!,
@@ -330,10 +344,10 @@ class ProductsView extends GetView<ProductsController> {
                               width: 180,
                               errorBuilder: (context, error, stackTrace) =>
                                   Container(
-                                width: 180,
-                                color: Colors.grey.shade200,
-                                child: const Icon(Icons.broken_image),
-                              ),
+                                    width: 180,
+                                    color: Colors.grey.shade200,
+                                    child: const Icon(Icons.broken_image),
+                                  ),
                             ),
                           );
                         },
@@ -399,8 +413,9 @@ class ProductsView extends GetView<ProductsController> {
   void _showProductDialog(BuildContext context, {Product? product}) {
     final isEdit = product != null;
     final nameController = TextEditingController(text: product?.name ?? '');
-    final categoryController =
-        TextEditingController(text: product?.category ?? '');
+    final categoryController = TextEditingController(
+      text: product?.category ?? '',
+    );
     final priceController = TextEditingController(
       text: product != null ? product.price.toString() : '',
     );
@@ -408,8 +423,9 @@ class ProductsView extends GetView<ProductsController> {
       text: product != null ? product.stockQuantity.toString() : '',
     );
     final skuController = TextEditingController(text: product?.sku ?? '');
-    final descriptionController =
-        TextEditingController(text: product?.description ?? '');
+    final descriptionController = TextEditingController(
+      text: product?.description ?? '',
+    );
     final imageUrlsController = TextEditingController(
       text: product != null ? product.imageUrls.join(', ') : '',
     );
@@ -446,8 +462,9 @@ class ProductsView extends GetView<ProductsController> {
               ),
               TextField(
                 controller: descriptionController,
-                decoration:
-                    const InputDecoration(labelText: 'Description (Optional)'),
+                decoration: const InputDecoration(
+                  labelText: 'Description (Optional)',
+                ),
                 maxLines: 2,
               ),
               TextField(

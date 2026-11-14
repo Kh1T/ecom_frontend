@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'app/dependency_injection.dart';
 import 'app/routes/app_pages.dart';
+import 'app/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: "Application",
+      title: 'Ecom',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
     );

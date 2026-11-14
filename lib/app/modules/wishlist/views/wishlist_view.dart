@@ -2,51 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/app_ui.dart';
 import '../../products/controllers/products_controller.dart';
 import '../controllers/wishlist_controller.dart';
 
 class WishlistView extends GetView<WishlistController> {
   const WishlistView({super.key});
 
-  static const Color _muted = Color(0xFF9CA3AF);
-  static const Color _border = Color(0xFFE5E7EB);
+  static const Color _border = AppColors.border;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(
-              height: 56,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Text(
-                    'Wishlist',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      padding: const EdgeInsets.only(left: 8),
-                      constraints: const BoxConstraints(),
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                      onPressed: () => Get.back(),
-                    ),
-                  ),
-                ],
-              ),
+            const AppPageHeader(
+              title: 'Wishlist',
+              subtitle: 'Products saved for later',
             ),
             Expanded(
               child: Obx(() {
@@ -57,8 +32,7 @@ class WishlistView extends GetView<WishlistController> {
                 return GridView.builder(
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
@@ -79,7 +53,7 @@ class WishlistView extends GetView<WishlistController> {
   Widget _buildProductCard(Product product) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: _border),
         boxShadow: [
@@ -112,7 +86,7 @@ class WishlistView extends GetView<WishlistController> {
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.surface,
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
@@ -164,7 +138,7 @@ class WishlistView extends GetView<WishlistController> {
             child: ElevatedButton.icon(
               onPressed: () => controller.addToCart(product),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 padding: EdgeInsets.zero,
@@ -208,69 +182,13 @@ class WishlistView extends GetView<WishlistController> {
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF3F4F6),
-                borderRadius: BorderRadius.circular(28),
-              ),
-              child: const Icon(
-                Icons.favorite_border_rounded,
-                size: 44,
-                color: Colors.black38,
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Your Wishlist is empty',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Tap the heart on any product to save it here.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: _muted,
-                height: 1.4,
-              ),
-            ),
-            const SizedBox(height: 28),
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton(
-                onPressed: () => Get.offAllNamed(Routes.HOME),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                child: const Text(
-                  'Browse Products',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+    return AppEmptyState(
+      icon: Icons.favorite_border_rounded,
+      title: 'Your wishlist is empty',
+      message: 'Tap the heart on any product to save it here.',
+      action: ElevatedButton(
+        onPressed: () => Get.offAllNamed(Routes.HOME),
+        child: const Text('Browse Products'),
       ),
     );
   }

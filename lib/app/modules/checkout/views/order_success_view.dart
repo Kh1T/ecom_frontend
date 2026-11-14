@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../theme/app_theme.dart';
 
 class OrderSuccessView extends StatelessWidget {
   const OrderSuccessView({super.key});
@@ -9,7 +10,7 @@ class OrderSuccessView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -23,7 +24,7 @@ class OrderSuccessView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.w700,
-                  color: Colors.black,
+                  color: AppColors.textPrimary,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -33,7 +34,7 @@ class OrderSuccessView extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,
-                  color: Color(0xFF9CA3AF),
+                  color: AppColors.textSecondary,
                   height: 1.4,
                 ),
               ),
@@ -44,7 +45,7 @@ class OrderSuccessView extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => Get.offAllNamed(Routes.HOME),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -53,10 +54,7 @@ class OrderSuccessView extends StatelessWidget {
                   ),
                   child: const Text(
                     'Continue Shopping',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -79,7 +77,7 @@ class OrderSuccessView extends StatelessWidget {
             width: 150,
             height: 150,
             decoration: const BoxDecoration(
-              color: Colors.black,
+              color: AppColors.primary,
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.check, color: Colors.white, size: 64),
@@ -104,7 +102,7 @@ class OrderSuccessView extends StatelessWidget {
         width: size,
         height: size,
         decoration: const BoxDecoration(
-          color: Colors.black,
+          color: AppColors.primary,
           shape: BoxShape.circle,
         ),
       ),

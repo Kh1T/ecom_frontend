@@ -3,13 +3,15 @@ import 'package:get/get.dart';
 
 import '../../../data/services/user_service.dart';
 import '../../../routes/app_pages.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/app_ui.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
-  static const Color _muted = Color(0xFF9CA3AF);
-  static const Color _border = Color(0xFFE5E7EB);
-  static const Color _fieldBg = Color(0xFFF9FAFB);
+  static const Color _muted = AppColors.textSecondary;
+  static const Color _border = AppColors.border;
+  static const Color _fieldBg = AppColors.surfaceMuted;
 
   UserService? get _userService =>
       Get.isRegistered<UserService>() ? Get.find<UserService>() : null;
@@ -19,39 +21,13 @@ class ProfileView extends StatelessWidget {
     final userService = _userService;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(
-              height: 56,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Text(
-                    'Profile',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      padding: const EdgeInsets.only(left: 8),
-                      constraints: const BoxConstraints(),
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                      onPressed: () => Get.back(),
-                    ),
-                  ),
-                ],
-              ),
+            const AppPageHeader(
+              title: 'Profile',
+              subtitle: 'Account and preferences',
             ),
             Expanded(
               child: ListView(
@@ -84,51 +60,61 @@ class ProfileView extends StatelessWidget {
     final name = isLoggedIn
         ? (user.fullName.isNotEmpty ? user.fullName : user.email)
         : 'Guest User';
-    final subtitle = isLoggedIn
-        ? user.email
-        : 'Sign in to manage your account';
+    final subtitle = isLoggedIn ? user.email : 'Sign in to manage your account';
 
-    return Column(
-      children: [
-        ClipOval(
-          child: Image.asset(
-            'assets/images/avatar.png',
-            width: 88,
-            height: 88,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Container(
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadii.large),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        children: [
+          ClipOval(
+            child: Image.asset(
+              'assets/images/avatar.png',
               width: 88,
               height: 88,
-              color: _fieldBg,
-              child: const Icon(Icons.person, size: 44, color: Colors.black38),
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                width: 88,
+                height: 88,
+                color: _fieldBg,
+                child: const Icon(
+                  Icons.person,
+                  size: 44,
+                  color: Colors.black38,
+                ),
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 14),
-        Text(
-          name,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
-            letterSpacing: -0.3,
+          const SizedBox(height: 14),
+          Text(
+            name,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+              letterSpacing: -0.3,
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          subtitle,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 14, color: _muted),
-        ),
-      ],
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 14, color: _muted),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildMenu() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: _border),
       ),
@@ -181,7 +167,7 @@ class ProfileView extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () => Get.toNamed(Routes.AUTHENTICATION),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
+          backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(
@@ -262,7 +248,7 @@ class _MenuTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: const Color(0xFFF3F4F6),
+                color: AppColors.surfaceMuted,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, size: 20, color: Colors.black87),
