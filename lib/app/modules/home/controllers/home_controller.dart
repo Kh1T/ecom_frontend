@@ -145,15 +145,18 @@ class HomeController extends GetxController {
   }
 
   void enterSearch() {
-    isSearchActive.value = true;
     if (!searchFocusNode.hasFocus) {
       searchFocusNode.requestFocus();
     }
   }
 
-  void exitSearch() {
-    isSearchActive.value = false;
+  void dismissSearch() {
     searchFocusNode.unfocus();
+    isSearchActive.value = false;
+  }
+
+  void exitSearch() {
+    dismissSearch();
     searchController.clear();
     searchQuery.value = '';
   }
@@ -174,9 +177,7 @@ class HomeController extends GetxController {
   void clearSearch() {
     searchController.clear();
     searchQuery.value = '';
-    if (!searchFocusNode.hasFocus) {
-      searchFocusNode.requestFocus();
-    }
+    dismissSearch();
   }
 
   WishlistService? get _wishlist =>
