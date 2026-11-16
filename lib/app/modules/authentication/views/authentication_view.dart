@@ -29,7 +29,7 @@ class AuthenticationView extends GetView<AuthenticationController> {
                         size: 20,
                         color: Colors.black,
                       ),
-                      onPressed: () => Get.back(),
+                      onPressed: _close,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -305,6 +305,12 @@ class AuthenticationView extends GetView<AuthenticationController> {
         ),
       ),
     );
+  }
+
+  Future<void> _close() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    await Future<void>.delayed(const Duration(milliseconds: 120));
+    Get.back();
   }
 
   Widget _buildTextField({

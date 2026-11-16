@@ -12,6 +12,7 @@ class SearchViewController extends GetxController {
   final selectedCategory = 'All'.obs;
   final selectedSort = 'default'.obs;
   final favorites = <int>{}.obs;
+  bool _isDisposed = false;
 
   ProductsController? get _productsController =>
       Get.isRegistered<ProductsController>()
@@ -132,7 +133,19 @@ class SearchViewController extends GetxController {
   }
 
   @override
+  void onReady() {
+    super.onReady();
+    Future<void>.delayed(const Duration(milliseconds: 350), () {
+      if (!_isDisposed) {
+        searchFocusNode.requestFocus();
+      }
+    });
+  }
+
+  @override
   void onClose() {
+    _isDisposed = true;
+    searchFocusNode.unfocus();
     searchFocusNode.dispose();
     searchController.dispose();
     super.onClose();

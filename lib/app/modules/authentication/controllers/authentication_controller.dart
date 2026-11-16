@@ -176,6 +176,7 @@ class AuthenticationController extends GetxController {
       }
       isLoading.value = false;
       Get.snackbar('Success', 'Account created successfully as Test User');
+      await _dismissKeyboard();
       Get.offAllNamed<dynamic>(Routes.HOME);
       return;
     }
@@ -219,6 +220,7 @@ class AuthenticationController extends GetxController {
         }
         isLoading.value = false;
         Get.snackbar('Success', 'Signed in successfully as Test User');
+        await _dismissKeyboard();
         Get.offAllNamed<dynamic>(Routes.HOME);
         return;
       } else {
@@ -265,6 +267,7 @@ class AuthenticationController extends GetxController {
       Get.snackbar('Success', successMessage);
       final destination =
           user != null && user.isAdmin ? Routes.ADMIN : Routes.HOME;
+      await _dismissKeyboard();
       Get.offAllNamed<dynamic>(destination);
     } on DioException catch (e) {
       _showError(_extractError(e));
@@ -273,6 +276,11 @@ class AuthenticationController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> _dismissKeyboard() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    await Future<void>.delayed(const Duration(milliseconds: 120));
   }
 
   String? _extractToken(dynamic data) {

@@ -242,6 +242,7 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+    searchFocusNode.unfocus();
     searchFocusNode.dispose();
     searchController.dispose();
     super.onClose();
