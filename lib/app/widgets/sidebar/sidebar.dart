@@ -227,183 +227,128 @@ class Sidebar extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                ),
-              ),
-            ],
-          ],
-        ),
-      );
-    }
-
-    if (userService == null) {
-      return content(
-        name: 'Guest User',
-        subtitle: 'Tap to sign in',
-        initial: 'G',
-        isLoggedIn: false,
-      );
-    }
-
-    return Obx(() {
-      final user = userService.currentUser.value;
-      final isLoggedIn = userService.isLoggedIn && user != null;
-
-      if (!isLoggedIn) {
-        return content(
-          name: 'Guest User',
-          subtitle: 'Sign in to sync your cart',
-          initial: 'G',
-          isLoggedIn: false,
-        );
-      }
-
-      final name = user.fullName.isNotEmpty
-          ? user.fullName
-          : (user.email.isNotEmpty ? user.email : 'Ecom User');
-      final email = user.email.isNotEmpty ? user.email : 'user@example.com';
-
-      return content(
-        name: name,
-        subtitle: email,
-        initial: name.isNotEmpty ? name[0].toUpperCase() : 'U',
-        isLoggedIn: true,
-        role: user.role,
-      );
-    });
-  }
-
-  Widget _buildAuthAction(UserService? userService) {
-    if (userService == null) {
-      return _authTile(
-        icon: Icons.login_rounded,
-        label: 'Sign In / Register',
-        color: _ink,
-        onTap: () => Get.toNamed(Routes.authentication),
-      );
-    }
-
-    return Obx(() {
-      final isLoggedIn =
-          userService.isLoggedIn && userService.currentUser.value != null;
-      if (!isLoggedIn) {
-        return _authTile(
-          icon: Icons.login_rounded,
-          label: 'Sign In / Register',
-          color: _ink,
-          onTap: () => Get.toNamed(Routes.authentication),
-        );
-      }
-      return _authTile(
-        icon: Icons.logout_rounded,
-        label: 'Logout',
-        color: _accent,
-        onTap: () {
-          userService.clear();
-          Get.offAllNamed(Routes.home);
-        },
-      );
-    });
-  }
-
-  Widget _authTile({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.06),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: _line, width: 1),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 20, color: color),
-              const SizedBox(width: 12),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: color,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SidebarTile extends StatelessWidget {
-  const _SidebarTile({
-    required this.icon,
-    required this.activeIcon,
-    required this.label,
-    required this.route,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final IconData activeIcon;
-  final String label;
-  final String route;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final isActive = Get.currentRoute == route;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-          decoration: BoxDecoration(
-            color: isActive ? Sidebar._ink : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                isActive ? activeIcon : icon,
-                size: 21,
-                color: isActive ? Colors.white : Sidebar._ink,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 14.5,
-                    fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                    color: isActive ? Colors.white : Sidebar._ink,
-                  ),
-                ),
-              ),
-              if (isActive)
-                Container(
-                  width: 6,
-                  height: 6,
                   decoration: const BoxDecoration(
-                    color: Sidebar._accent,
-                    shape: BoxShape.circle,
+                    color: Colors.indigo,
+                  ),
+                );
+              }
+            })
+          else
+            UserAccountsDrawerHeader(
+              accountName: const Text('Guest User'),
+              accountEmail: const Text('Tap to sign in'),
+              onDetailsPressed: () {
+                Get.toNamed(Routes.AUTHENTICATION);
+              },
+              currentAccountPicture: const CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.person_outline,
+                  size: 36,
+                  color: Colors.indigo,
+                ),
+              ),
+              decoration: const BoxDecoration(
+                color: Colors.indigo,
+              ),
+            ),
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
+            selected: Get.currentRoute == Routes.HOME,
+            onTap: () {
+              Get.offAllNamed(Routes.HOME);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.dashboard),
+            title: const Text('Dashboard'),
+            selected: Get.currentRoute == Routes.DASHBOARD,
+            onTap: () {
+              Get.offAllNamed(Routes.DASHBOARD);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.inventory_2),
+            title: const Text('Products'),
+            selected: Get.currentRoute == Routes.PRODUCTS,
+            onTap: () {
+              Get.offAllNamed(Routes.PRODUCTS);
+            },
+          ),
+          if (userService != null)
+            Obx(() {
+              final user = userService.currentUser.value;
+              if (user == null || !user.isAdmin) return const SizedBox.shrink();
+              return ListTile(
+                leading: const Icon(Icons.admin_panel_settings),
+                title: const Text('Admin'),
+                selected: Get.currentRoute == Routes.ADMIN,
+                onTap: () {
+                  Get.offAllNamed(Routes.ADMIN);
+                },
+              );
+            })
+          else
+            const SizedBox.shrink(),
+          const Divider(),
+          // Language switcher
+          if (Get.isRegistered<LanguageController>())
+            Obx(() {
+              final langController = Get.find<LanguageController>();
+              final isEn = langController.isEnglish;
+              return ListTile(
+                leading: const Icon(Icons.language),
+                title: Text('SIDEBAR_LANGUAGE'.tr),
+                trailing: Text(
+                  isEn ? 'EN' : 'KH',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.indigo,
                   ),
                 ),
-            ],
-          ),
-        ),
+                onTap: () {
+                  langController.changeLanguage(
+                    isEn ? 'km_KH' : 'en_US',
+                  );
+                },
+              );
+            })
+          else
+            const SizedBox.shrink(),
+          const Divider(),
+          if (userService != null)
+            Obx(() {
+              final user = userService.currentUser.value;
+              final isLoggedIn = userService.isLoggedIn && user != null;
+              if (isLoggedIn) {
+                return ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () {
+                    userService.clear();
+                    Get.offAllNamed(Routes.HOME);
+                  },
+                );
+              } else {
+                return ListTile(
+                  leading: const Icon(Icons.login),
+                  title: const Text('Sign In / Register'),
+                  onTap: () {
+                    Get.toNamed(Routes.AUTHENTICATION);
+                  },
+                );
+              }
+            })
+          else
+            ListTile(
+              leading: const Icon(Icons.login),
+              title: const Text('Sign In / Register'),
+              onTap: () {
+                Get.toNamed(Routes.AUTHENTICATION);
+              },
+            ),
+        ],
       ),
     );
   }

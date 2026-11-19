@@ -14,51 +14,71 @@ class DashboardView extends GetView<DashboardController> {
     final langController = Get.find<LanguageController>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Dashboard')),
-      drawer: const Sidebar(),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 560),
-            child: Container(
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(AppRadii.large),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Column(
+      appBar: AppBar(
+        title: Text('DASHBOARD_TITLE'.tr),
+        centerTitle: true,
+        actions: [
+          // Language switcher button
+          Obx(() {
+            final isEn = langController.isEnglish;
+            return PopupMenuButton<String>(
+              icon: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(AppRadii.medium),
-                    ),
-                    child: const Icon(
-                      Icons.space_dashboard_outlined,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+                  const Icon(Icons.language, size: 22),
+                  const SizedBox(width: 4),
                   Text(
-                    'Dashboard is ready',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Your dashboard workspace is working correctly.',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textSecondary,
+                    isEn ? 'EN' : 'KH',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
-            ),
-          ),
+              tooltip: 'DASHBOARD_LANGUAGE'.tr,
+              onSelected: (value) {
+                langController.changeLanguage(value);
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'en_US',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.check,
+                        size: 18,
+                        color: isEn ? Colors.indigo : Colors.transparent,
+                      ),
+                      const SizedBox(width: 8),
+                      Text('DASHBOARD_ENGLISH'.tr),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'km_KH',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.check,
+                        size: 18,
+                        color: !isEn ? Colors.indigo : Colors.transparent,
+                      ),
+                      const SizedBox(width: 8),
+                      Text('DASHBOARD_KHMER'.tr),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }),
+        ],
+      ),
+      drawer: const Sidebar(),
+      body: Center(
+        child: Text(
+          'DASHBOARD_IS_WORKING'.tr,
+          style: const TextStyle(fontSize: 20),
         ),
       ),
     );
