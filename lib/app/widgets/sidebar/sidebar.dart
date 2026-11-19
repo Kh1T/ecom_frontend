@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../data/services/user_service.dart';
 import '../../routes/app_pages.dart';
-import '../../theme/app_theme.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({super.key});
@@ -49,29 +48,29 @@ class Sidebar extends StatelessWidget {
                     icon: Icons.home_outlined,
                     activeIcon: Icons.home_rounded,
                     label: 'Home',
-                    route: Routes.HOME,
-                    onTap: () => Get.offAllNamed(Routes.HOME),
+                    route: Routes.home,
+                    onTap: () => Get.offAllNamed(Routes.home),
                   ),
                   _SidebarTile(
                     icon: Icons.grid_view_rounded,
                     activeIcon: Icons.grid_view_rounded,
                     label: 'Products',
-                    route: Routes.PRODUCTS,
-                    onTap: () => Get.offAllNamed(Routes.PRODUCTS),
+                    route: Routes.products,
+                    onTap: () => Get.offAllNamed(Routes.products),
                   ),
                   _SidebarTile(
                     icon: Icons.search_rounded,
                     activeIcon: Icons.search_rounded,
                     label: 'Search',
-                    route: Routes.SEARCH,
-                    onTap: () => Get.toNamed(Routes.SEARCH),
+                    route: Routes.search,
+                    onTap: () => Get.toNamed(Routes.search),
                   ),
                   _SidebarTile(
                     icon: Icons.shopping_bag_outlined,
                     activeIcon: Icons.shopping_bag_rounded,
                     label: 'Cart',
-                    route: Routes.CART,
-                    onTap: () => Get.toNamed(Routes.CART),
+                    route: Routes.cart,
+                    onTap: () => Get.toNamed(Routes.cart),
                   ),
                   const SizedBox(height: 8),
                   _sectionLabel('ACCOUNT'),
@@ -79,8 +78,8 @@ class Sidebar extends StatelessWidget {
                     icon: Icons.dashboard_outlined,
                     activeIcon: Icons.dashboard_rounded,
                     label: 'Dashboard',
-                    route: Routes.DASHBOARD,
-                    onTap: () => Get.offAllNamed(Routes.DASHBOARD),
+                    route: Routes.dashboard,
+                    onTap: () => Get.offAllNamed(Routes.dashboard),
                   ),
                   if (userService != null)
                     Obx(() {
@@ -92,8 +91,8 @@ class Sidebar extends StatelessWidget {
                         icon: Icons.admin_panel_settings_outlined,
                         activeIcon: Icons.admin_panel_settings_rounded,
                         label: 'Admin',
-                        route: Routes.ADMIN,
-                        onTap: () => Get.offAllNamed(Routes.ADMIN),
+                        route: Routes.admin,
+                        onTap: () => Get.offAllNamed(Routes.admin),
                       );
                     }),
                 ],
@@ -210,7 +209,7 @@ class Sidebar extends StatelessWidget {
             if (!isLoggedIn) ...[
               const SizedBox(height: 14),
               GestureDetector(
-                onTap: () => Get.toNamed(Routes.AUTHENTICATION),
+                onTap: () => Get.toNamed(Routes.authentication),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 11),
@@ -278,7 +277,7 @@ class Sidebar extends StatelessWidget {
         icon: Icons.login_rounded,
         label: 'Sign In / Register',
         color: _ink,
-        onTap: () => Get.toNamed(Routes.AUTHENTICATION),
+        onTap: () => Get.toNamed(Routes.authentication),
       );
     }
 
@@ -290,7 +289,7 @@ class Sidebar extends StatelessWidget {
           icon: Icons.login_rounded,
           label: 'Sign In / Register',
           color: _ink,
-          onTap: () => Get.toNamed(Routes.AUTHENTICATION),
+          onTap: () => Get.toNamed(Routes.authentication),
         );
       }
       return _authTile(
@@ -299,7 +298,7 @@ class Sidebar extends StatelessWidget {
         color: _accent,
         onTap: () {
           userService.clear();
-          Get.offAllNamed(Routes.HOME);
+          Get.offAllNamed(Routes.home);
         },
       );
     });

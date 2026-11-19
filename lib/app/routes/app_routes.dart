@@ -3,32 +3,32 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   Routes._();
-  static const HOME = _Paths.HOME;
-  static const AUTHENTICATION = _Paths.AUTHENTICATION;
-  static const DASHBOARD = _Paths.DASHBOARD;
-  static const ADMIN = _Paths.ADMIN;
-  static const PRODUCTS = _Paths.PRODUCTS;
-  static const SEARCH = _Paths.SEARCH;
-  static const CART = _Paths.CART;
-  static const CHECKOUT = _Paths.CHECKOUT;
-  static const ORDER_SUCCESS = _Paths.ORDER_SUCCESS;
-  static const WISHLIST = _Paths.WISHLIST;
-  static const CATEGORIES = _Paths.CATEGORIES;
-  static const PROFILE = _Paths.PROFILE;
+  static const home = _Paths.home;
+  static const authentication = _Paths.authentication;
+  static const dashboard = _Paths.dashboard;
+  static const admin = _Paths.admin;
+  static const products = _Paths.products;
+  static const search = _Paths.search;
+  static const cart = _Paths.cart;
+  static const checkout = _Paths.checkout;
+  static const orderSuccess = _Paths.orderSuccess;
+  static const wishlist = _Paths.wishlist;
+  static const categories = _Paths.categories;
+  static const profile = _Paths.profile;
 }
 
 abstract class _Paths {
   _Paths._();
-  static const HOME = '/home';
-  static const AUTHENTICATION = '/authentication';
-  static const DASHBOARD = '/dashboard';
-  static const ADMIN = '/admin';
-  static const PRODUCTS = '/products';
-  static const SEARCH = '/search';
-  static const CART = '/cart';
-  static const CHECKOUT = '/checkout';
-  static const ORDER_SUCCESS = '/order-success';
-  static const WISHLIST = '/wishlist';
-  static const CATEGORIES = '/categories';
-  static const PROFILE = '/profile';
+  static const home = '/home';
+  static const authentication = '/authentication';
+  static const dashboard = '/dashboard';
+  static const admin = '/admin';
+  static const products = '/products';
+  static const search = '/search';
+  static const cart = '/cart';
+  static const checkout = '/checkout';
+  static const orderSuccess = '/order-success';
+  static const wishlist = '/wishlist';
+  static const categories = '/categories';
+  static const profile = '/profile';
 }

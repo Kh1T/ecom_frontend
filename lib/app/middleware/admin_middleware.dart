@@ -9,14 +9,14 @@ class AdminMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     if (!Get.isRegistered<UserService>()) {
-      return const RouteSettings(name: Routes.AUTHENTICATION);
+      return const RouteSettings(name: Routes.authentication);
     }
 
     final userService = Get.find<UserService>();
     final user = userService.currentUser.value;
 
     if (!userService.isLoggedIn || user == null || !user.isAdmin) {
-      return const RouteSettings(name: Routes.HOME);
+      return const RouteSettings(name: Routes.home);
     }
 
     return null;

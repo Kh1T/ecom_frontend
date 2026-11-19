@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Ecom',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      initialRoute: AppPages.INITIAL,
+      initialRoute: AppPages.initial,
       getPages: AppPages.routes,
     );
   }

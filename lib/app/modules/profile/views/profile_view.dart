@@ -129,7 +129,7 @@ class ProfileView extends StatelessWidget {
           _MenuTile(
             icon: Icons.favorite_border_rounded,
             title: 'Wishlist',
-            onTap: () => Get.toNamed(Routes.WISHLIST),
+            onTap: () => Get.toNamed(Routes.wishlist),
           ),
           const _MenuDivider(),
           _MenuTile(
@@ -165,7 +165,7 @@ class ProfileView extends StatelessWidget {
       width: double.infinity,
       height: 54,
       child: ElevatedButton(
-        onPressed: () => Get.toNamed(Routes.AUTHENTICATION),
+        onPressed: () => Get.toNamed(Routes.authentication),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
@@ -189,7 +189,7 @@ class ProfileView extends StatelessWidget {
       child: OutlinedButton.icon(
         onPressed: () {
           userService.clear();
-          Get.offAllNamed(Routes.HOME);
+          Get.offAllNamed(Routes.home);
         },
         icon: const Icon(Icons.logout, size: 20, color: Colors.red),
         label: const Text(

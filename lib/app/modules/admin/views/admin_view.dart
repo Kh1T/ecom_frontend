@@ -99,7 +99,7 @@ class AdminView extends GetView<AdminController> {
                     Card(
                       child: InkWell(
                         onTap: stat['title'] == 'Products'
-                            ? () => Get.toNamed(Routes.PRODUCTS)
+                            ? () => Get.toNamed(Routes.products)
                             : null,
                         borderRadius: BorderRadius.circular(AppRadii.medium),
                         child: Padding(

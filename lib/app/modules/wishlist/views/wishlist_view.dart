@@ -187,7 +187,7 @@ class WishlistView extends GetView<WishlistController> {
       title: 'Your wishlist is empty',
       message: 'Tap the heart on any product to save it here.',
       action: ElevatedButton(
-        onPressed: () => Get.offAllNamed(Routes.HOME),
+        onPressed: () => Get.offAllNamed(Routes.home),
         child: const Text('Browse Products'),
       ),
     );

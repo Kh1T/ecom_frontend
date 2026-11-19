@@ -177,7 +177,7 @@ class AuthenticationController extends GetxController {
       isLoading.value = false;
       Get.snackbar('Success', 'Account created successfully as Test User');
       await _dismissKeyboard();
-      Get.offAllNamed<dynamic>(Routes.HOME);
+      Get.offAllNamed<dynamic>(Routes.home);
       return;
     }
 
@@ -221,7 +221,7 @@ class AuthenticationController extends GetxController {
         isLoading.value = false;
         Get.snackbar('Success', 'Signed in successfully as Test User');
         await _dismissKeyboard();
-        Get.offAllNamed<dynamic>(Routes.HOME);
+        Get.offAllNamed<dynamic>(Routes.home);
         return;
       } else {
         _showError('Invalid password for test user.');
@@ -266,7 +266,7 @@ class AuthenticationController extends GetxController {
 
       Get.snackbar('Success', successMessage);
       final destination =
-          user != null && user.isAdmin ? Routes.ADMIN : Routes.HOME;
+          user != null && user.isAdmin ? Routes.admin : Routes.home;
       await _dismissKeyboard();
       Get.offAllNamed<dynamic>(destination);
     } on DioException catch (e) {

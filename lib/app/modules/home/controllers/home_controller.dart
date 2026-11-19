@@ -217,19 +217,19 @@ class HomeController extends GetxController {
         break;
       case 1:
         // Products / Categories
-        Get.toNamed(Routes.CATEGORIES);
+        Get.toNamed(Routes.categories);
         break;
       case 2:
         // Favorites
-        Get.toNamed(Routes.WISHLIST);
+        Get.toNamed(Routes.wishlist);
         break;
       case 3:
         // Cart
-        Get.toNamed(Routes.CART);
+        Get.toNamed(Routes.cart);
         break;
       case 4:
         // Profile
-        Get.toNamed(Routes.PROFILE);
+        Get.toNamed(Routes.profile);
         break;
     }
   }

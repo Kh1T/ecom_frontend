@@ -29,66 +29,66 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const initial = Routes.home;
 
   static final routes = [
     GetPage(
-      name: _Paths.HOME,
+      name: _Paths.home,
       page: () => const HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
-      name: _Paths.AUTHENTICATION,
+      name: _Paths.authentication,
       page: () => const AuthenticationView(),
       binding: AuthenticationBinding(),
     ),
     GetPage(
-      name: _Paths.DASHBOARD,
+      name: _Paths.dashboard,
       page: () => const DashboardView(),
       binding: DashboardBinding(),
     ),
     GetPage(
-      name: _Paths.ADMIN,
+      name: _Paths.admin,
       page: () => const AdminView(),
       binding: AdminBinding(),
       middlewares: [AdminMiddleware()],
     ),
     GetPage(
-      name: _Paths.PRODUCTS,
+      name: _Paths.products,
       page: () => const ProductsView(),
       binding: ProductsBinding(),
     ),
     GetPage(
-      name: _Paths.SEARCH,
+      name: _Paths.search,
       page: () => const SearchView(),
       binding: SearchBinding(),
     ),
     GetPage(
-      name: _Paths.CART,
+      name: _Paths.cart,
       page: () => const CartView(),
       binding: CartBinding(),
     ),
     GetPage(
-      name: _Paths.CHECKOUT,
+      name: _Paths.checkout,
       page: () => const CheckoutView(),
       binding: CheckoutBinding(),
     ),
     GetPage(
-      name: _Paths.ORDER_SUCCESS,
+      name: _Paths.orderSuccess,
       page: () => const OrderSuccessView(),
     ),
     GetPage(
-      name: _Paths.WISHLIST,
+      name: _Paths.wishlist,
       page: () => const WishlistView(),
       binding: WishlistBinding(),
     ),
     GetPage(
-      name: _Paths.CATEGORIES,
+      name: _Paths.categories,
       page: () => const CategoriesView(),
       binding: CategoriesBinding(),
     ),
     GetPage(
-      name: _Paths.PROFILE,
+      name: _Paths.profile,
       page: () => const ProfileView(),
     ),
   ];

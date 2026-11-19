@@ -79,7 +79,7 @@ class CheckoutController extends GetxController {
     await cart.clearCart();
     isPlacingOrder.value = false;
 
-    Get.offAllNamed(Routes.ORDER_SUCCESS);
+    Get.offAllNamed(Routes.orderSuccess);
   }
 
   @override

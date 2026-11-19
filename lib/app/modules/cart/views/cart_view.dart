@@ -88,7 +88,7 @@ class CartView extends GetView<CartController> {
                             width: double.infinity,
                             height: 56,
                             child: ElevatedButton(
-                              onPressed: () => Get.toNamed(Routes.CHECKOUT),
+                              onPressed: () => Get.toNamed(Routes.checkout),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.black,
                                 foregroundColor: Colors.white,

@@ -43,7 +43,7 @@ class OrderSuccessView extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () => Get.offAllNamed(Routes.HOME),
+                  onPressed: () => Get.offAllNamed(Routes.home),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
