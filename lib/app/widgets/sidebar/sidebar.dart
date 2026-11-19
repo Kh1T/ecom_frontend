@@ -8,6 +8,11 @@ import '../../theme/app_theme.dart';
 class Sidebar extends StatelessWidget {
   const Sidebar({super.key});
 
+  static const _ink = Color(0xFF1C1C1E);
+  static const _accent = Color(0xFFEE5D26);
+  static const _muted = Color(0xFF9E9EA4);
+  static const _line = Color(0xFFE2E2E6);
+
   @override
   Widget build(BuildContext context) {
     final userService = Get.isRegistered<UserService>()
@@ -22,81 +27,60 @@ class Sidebar extends StatelessWidget {
     }
 
     return Drawer(
-      width: 316,
-      backgroundColor: AppColors.surface,
-      surfaceTintColor: Colors.transparent,
+      backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.horizontal(right: Radius.circular(28)),
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(24),
+          bottomRight: Radius.circular(24),
+        ),
       ),
       child: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(22, 20, 18, 18),
-              child: _buildBrand(),
-            ),
-            const Divider(),
+            _buildHeader(userService),
+            const SizedBox(height: 12),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(14, 16, 14, 20),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 children: [
-                  _buildAccount(userService),
-                  const SizedBox(height: 24),
-                  const _SectionLabel('Shop'),
-                  const SizedBox(height: 8),
-                  const _NavigationTile(
+                  _sectionLabel('SHOP'),
+                  _SidebarTile(
                     icon: Icons.home_outlined,
-                    selectedIcon: Icons.home_rounded,
-                    title: 'Home',
+                    activeIcon: Icons.home_rounded,
+                    label: 'Home',
                     route: Routes.HOME,
+                    onTap: () => Get.offAllNamed(Routes.HOME),
                   ),
-                  const _NavigationTile(
-                    icon: Icons.grid_view_outlined,
-                    selectedIcon: Icons.grid_view_rounded,
-                    title: 'Categories',
-                    route: Routes.CATEGORIES,
-                  ),
-                  const _NavigationTile(
-                    icon: Icons.devices_other_outlined,
-                    selectedIcon: Icons.devices_other_rounded,
-                    title: 'All products',
+                  _SidebarTile(
+                    icon: Icons.grid_view_rounded,
+                    activeIcon: Icons.grid_view_rounded,
+                    label: 'Products',
                     route: Routes.PRODUCTS,
+                    onTap: () => Get.offAllNamed(Routes.PRODUCTS),
                   ),
-                  const _NavigationTile(
+                  _SidebarTile(
                     icon: Icons.search_rounded,
-                    selectedIcon: Icons.manage_search_rounded,
-                    title: 'Search',
+                    activeIcon: Icons.search_rounded,
+                    label: 'Search',
                     route: Routes.SEARCH,
+                    onTap: () => Get.toNamed(Routes.SEARCH),
                   ),
-                  const SizedBox(height: 18),
-                  const _SectionLabel('My account'),
-                  const SizedBox(height: 8),
-                  const _NavigationTile(
-                    icon: Icons.favorite_border_rounded,
-                    selectedIcon: Icons.favorite_rounded,
-                    title: 'Wishlist',
-                    route: Routes.WISHLIST,
-                  ),
-                  const _NavigationTile(
+                  _SidebarTile(
                     icon: Icons.shopping_bag_outlined,
-                    selectedIcon: Icons.shopping_bag_rounded,
-                    title: 'Shopping bag',
+                    activeIcon: Icons.shopping_bag_rounded,
+                    label: 'Cart',
                     route: Routes.CART,
+                    onTap: () => Get.toNamed(Routes.CART),
                   ),
-                  const _NavigationTile(
-                    icon: Icons.person_outline_rounded,
-                    selectedIcon: Icons.person_rounded,
-                    title: 'Profile',
-                    route: Routes.PROFILE,
-                  ),
-                  const SizedBox(height: 18),
-                  const _SectionLabel('Workspace'),
                   const SizedBox(height: 8),
-                  const _NavigationTile(
-                    icon: Icons.space_dashboard_outlined,
-                    selectedIcon: Icons.space_dashboard_rounded,
-                    title: 'Dashboard',
+                  _sectionLabel('ACCOUNT'),
+                  _SidebarTile(
+                    icon: Icons.dashboard_outlined,
+                    activeIcon: Icons.dashboard_rounded,
+                    label: 'Dashboard',
                     route: Routes.DASHBOARD,
+                    onTap: () => Get.offAllNamed(Routes.DASHBOARD),
                   ),
                   if (userService != null)
                     Obx(() {
@@ -104,118 +88,196 @@ class Sidebar extends StatelessWidget {
                       if (user == null || !user.isAdmin) {
                         return const SizedBox.shrink();
                       }
-                      return const _NavigationTile(
+                      return _SidebarTile(
                         icon: Icons.admin_panel_settings_outlined,
-                        selectedIcon: Icons.admin_panel_settings_rounded,
-                        title: 'Store management',
+                        activeIcon: Icons.admin_panel_settings_rounded,
+                        label: 'Admin',
                         route: Routes.ADMIN,
+                        onTap: () => Get.offAllNamed(Routes.ADMIN),
                       );
                     }),
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(14, 14, 14, 18),
-              decoration: const BoxDecoration(
-                color: AppColors.surface,
-                border: Border(top: BorderSide(color: AppColors.border)),
-              ),
-              child: _buildSessionAction(userService),
-            ),
+            _buildAuthAction(userService),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBrand() {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                height: 20,
-                fit: BoxFit.contain,
-                alignment: Alignment.centerLeft,
-                errorBuilder: (context, error, stackTrace) => const Text(
-                  'ECOM',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.8,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'Premium digital store',
-                style: TextStyle(
-                  fontSize: 11.5,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ],
-          ),
+  Widget _sectionLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1.4,
+          color: _muted,
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceMuted,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const Text(
-            'STORE',
-            style: TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.8,
-              color: AppColors.textSecondary,
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
-  Widget _buildAccount(UserService? userService) {
-    if (userService == null) return _guestAccount();
+  Widget _buildHeader(UserService? userService) {
+    Widget content({
+      required String name,
+      required String subtitle,
+      required String initial,
+      required bool isLoggedIn,
+      String? role,
+    }) {
+      return Container(
+        margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: _ink,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: isLoggedIn ? _accent : Colors.white12,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white24, width: 2),
+                  ),
+                  alignment: Alignment.center,
+                  child: isLoggedIn
+                      ? Text(
+                          initial,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Icon(
+                          Icons.person_outline,
+                          size: 28,
+                          color: Colors.white70,
+                        ),
+                ),
+                const Spacer(),
+                if (role != null && role.isNotEmpty)
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.white12,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Text(
+                      role.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Text(
+              name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 13,
+                color: Colors.white60,
+              ),
+            ),
+            if (!isLoggedIn) ...[
+              const SizedBox(height: 14),
+              GestureDetector(
+                onTap: () => Get.toNamed(Routes.AUTHENTICATION),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 11),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: _accent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Text(
+                    'Sign In / Register',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (userService == null) {
+      return content(
+        name: 'Guest User',
+        subtitle: 'Tap to sign in',
+        initial: 'G',
+        isLoggedIn: false,
+      );
+    }
 
     return Obx(() {
       final user = userService.currentUser.value;
-      if (!userService.isLoggedIn || user == null) return _guestAccount();
+      final isLoggedIn = userService.isLoggedIn && user != null;
 
-      final name = user.fullName.isNotEmpty ? user.fullName : user.email;
-      return _AccountCard(
-        name: name.isNotEmpty ? name : 'Ecom User',
-        detail: user.email,
+      if (!isLoggedIn) {
+        return content(
+          name: 'Guest User',
+          subtitle: 'Sign in to sync your cart',
+          initial: 'G',
+          isLoggedIn: false,
+        );
+      }
+
+      final name = user.fullName.isNotEmpty
+          ? user.fullName
+          : (user.email.isNotEmpty ? user.email : 'Ecom User');
+      final email = user.email.isNotEmpty ? user.email : 'user@example.com';
+
+      return content(
+        name: name,
+        subtitle: email,
         initial: name.isNotEmpty ? name[0].toUpperCase() : 'U',
-        badge: user.role.isNotEmpty ? user.role : 'Member',
-        avatarAsset: 'assets/images/avatar.png',
-        onTap: () => Get.toNamed(Routes.PROFILE),
+        isLoggedIn: true,
+        role: user.role,
       );
     });
   }
 
-  Widget _guestAccount() {
-    return _AccountCard(
-      name: 'Welcome to ECOM',
-      detail: 'Sign in for orders and saved items',
-      initial: 'E',
-      badge: 'Guest',
-      avatarAsset: 'assets/images/avatar.png',
-      onTap: () => Get.toNamed(Routes.AUTHENTICATION),
-    );
-  }
-
-  Widget _buildSessionAction(UserService? userService) {
+  Widget _buildAuthAction(UserService? userService) {
     if (userService == null) {
-      return _SessionButton(
+      return _authTile(
         icon: Icons.login_rounded,
-        label: 'Sign in or register',
+        label: 'Sign In / Register',
+        color: _ink,
         onTap: () => Get.toNamed(Routes.AUTHENTICATION),
       );
     }
@@ -223,155 +285,55 @@ class Sidebar extends StatelessWidget {
     return Obx(() {
       final isLoggedIn =
           userService.isLoggedIn && userService.currentUser.value != null;
-      return _SessionButton(
-        icon: isLoggedIn ? Icons.logout_rounded : Icons.login_rounded,
-        label: isLoggedIn ? 'Log out' : 'Sign in or register',
+      if (!isLoggedIn) {
+        return _authTile(
+          icon: Icons.login_rounded,
+          label: 'Sign In / Register',
+          color: _ink,
+          onTap: () => Get.toNamed(Routes.AUTHENTICATION),
+        );
+      }
+      return _authTile(
+        icon: Icons.logout_rounded,
+        label: 'Logout',
+        color: _accent,
         onTap: () {
-          if (isLoggedIn) {
-            userService.clear();
-            Get.offAllNamed(Routes.HOME);
-          } else {
-            Get.toNamed(Routes.AUTHENTICATION);
-          }
+          userService.clear();
+          Get.offAllNamed(Routes.HOME);
         },
       );
     });
   }
-}
 
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel(this.label);
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _authTile({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Text(
-        label.toUpperCase(),
-        style: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w800,
-          letterSpacing: 1.2,
-          color: AppColors.textSecondary,
-        ),
-      ),
-    );
-  }
-}
-
-class _AccountCard extends StatelessWidget {
-  const _AccountCard({
-    required this.name,
-    required this.detail,
-    required this.initial,
-    required this.badge,
-    required this.onTap,
-    this.avatarAsset,
-  });
-
-  final String name;
-  final String detail;
-  final String initial;
-  final String badge;
-  final VoidCallback onTap;
-  final String? avatarAsset;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.primary,
-      borderRadius: BorderRadius.circular(18),
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.06),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: _line, width: 1),
+          ),
           child: Row(
             children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.12),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.18),
-                    width: 1.5,
-                  ),
-                ),
-                child: ClipOval(
-                  child: avatarAsset == null
-                      ? Center(child: _AvatarFallback(initial: initial))
-                      : Image.asset(
-                          avatarAsset!,
-                          width: 46,
-                          height: 46,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Center(child: _AvatarFallback(initial: initial)),
-                        ),
-                ),
-              ),
+              Icon(icon, size: 20, color: color),
               const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 13.5,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            badge.toUpperCase(),
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 8,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.4,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      detail,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 10.5,
-                        color: Colors.white60,
-                      ),
-                    ),
-                  ],
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: color,
                 ),
-              ),
-              const SizedBox(width: 6),
-              const Icon(
-                Icons.chevron_right_rounded,
-                size: 20,
-                color: Colors.white70,
               ),
             ],
           ),
@@ -381,128 +343,67 @@ class _AccountCard extends StatelessWidget {
   }
 }
 
-class _AvatarFallback extends StatelessWidget {
-  const _AvatarFallback({required this.initial});
-
-  final String initial;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      initial,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-        fontWeight: FontWeight.w800,
-      ),
-    );
-  }
-}
-
-class _NavigationTile extends StatelessWidget {
-  const _NavigationTile({
+class _SidebarTile extends StatelessWidget {
+  const _SidebarTile({
     required this.icon,
-    required this.selectedIcon,
-    required this.title,
-    required this.route,
-  });
-
-  final IconData icon;
-  final IconData selectedIcon;
-  final String title;
-  final String route;
-
-  @override
-  Widget build(BuildContext context) {
-    final selected = Get.currentRoute == route;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Material(
-        color: selected ? AppColors.surfaceMuted : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: () {
-            if (selected) {
-              Get.back();
-            } else {
-              Get.offAllNamed(route);
-            }
-          },
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: selected
-                  ? Border.all(color: AppColors.border)
-                  : Border.all(color: Colors.transparent),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: selected ? AppColors.primary : Colors.transparent,
-                    borderRadius: BorderRadius.circular(9),
-                  ),
-                  child: Icon(
-                    selected ? selectedIcon : icon,
-                    size: 19,
-                    color: selected ? Colors.white : AppColors.textSecondary,
-                  ),
-                ),
-                const SizedBox(width: 11),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 13.5,
-                      fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                    ),
-                  ),
-                ),
-                if (selected)
-                  Container(
-                    width: 6,
-                    height: 6,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SessionButton extends StatelessWidget {
-  const _SessionButton({
-    required this.icon,
+    required this.activeIcon,
     required this.label,
+    required this.route,
     required this.onTap,
   });
 
   final IconData icon;
+  final IconData activeIcon;
   final String label;
+  final String route;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-      onPressed: onTap,
-      icon: Icon(icon, size: 18),
-      label: Text(label),
-      style: OutlinedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 48),
-        backgroundColor: AppColors.surfaceMuted,
-        side: BorderSide.none,
+    final isActive = Get.currentRoute == route;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+          decoration: BoxDecoration(
+            color: isActive ? Sidebar._ink : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                isActive ? activeIcon : icon,
+                size: 21,
+                color: isActive ? Colors.white : Sidebar._ink,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 14.5,
+                    fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+                    color: isActive ? Colors.white : Sidebar._ink,
+                  ),
+                ),
+              ),
+              if (isActive)
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: const BoxDecoration(
+                    color: Sidebar._accent,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -21,7 +21,7 @@ class SearchView extends GetView<SearchViewController> {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () => Get.back(),
+                    onTap: _close,
                     behavior: HitTestBehavior.opaque,
                     child: const Padding(
                       padding: EdgeInsets.only(right: 12),
@@ -53,7 +53,6 @@ class SearchView extends GetView<SearchViewController> {
                             child: TextField(
                               controller: controller.searchController,
                               focusNode: controller.searchFocusNode,
-                              autofocus: true,
                               onChanged: controller.onSearchChanged,
                               decoration: const InputDecoration(
                                 hintText: 'Search',
@@ -191,6 +190,12 @@ class SearchView extends GetView<SearchViewController> {
         ),
       ),
     );
+  }
+
+  Future<void> _close() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    await Future<void>.delayed(const Duration(milliseconds: 120));
+    Get.back();
   }
 
   Widget _buildProductCard(BuildContext context, Product product) {
@@ -405,6 +410,7 @@ class SearchView extends GetView<SearchViewController> {
   }
 
   void _showFilterBottomSheet(BuildContext context) {
+    FocusManager.instance.primaryFocus?.unfocus();
     Get.bottomSheet(
       Container(
         decoration: const BoxDecoration(
