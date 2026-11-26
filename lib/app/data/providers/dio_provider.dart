@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../config/app_config.dart';
 
@@ -16,7 +17,9 @@ class DioProvider {
       receiveTimeout: const Duration(seconds: 10),
       headers: {'Content-Type': 'application/json'},
     ),
-  )..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+)..interceptors.addAll([
+    if (kDebugMode) LogInterceptor(requestBody: true, responseBody: true),
+  ]);
 
   static Dio get dio => _dio;
 }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../config/app_config.dart';
 import '../../../data/models/user_model.dart';
@@ -8,6 +9,7 @@ import '../../../data/providers/api_provider.dart';
 import '../../../data/services/storage_service.dart';
 import '../../../data/services/user_service.dart';
 import '../../../routes/app_pages.dart';
+
 
 class AuthenticationController extends GetxController {
   static const String dummyEmail = 'testuser@gmail.com';
@@ -25,6 +27,7 @@ class AuthenticationController extends GetxController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final nameController = TextEditingController();
+  final resetEmailController = TextEditingController();
 
   final isPasswordHidden = true.obs;
   final isSignUp = false.obs;
@@ -62,7 +65,7 @@ class AuthenticationController extends GetxController {
   }
 
   void forgotPassword() {
-    final resetEmailController = TextEditingController(text: emailController.text);
+    resetEmailController.text = emailController.text;
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(24),
@@ -251,21 +254,24 @@ class AuthenticationController extends GetxController {
 
       final data = response.data;
       final token = _extractToken(data);
-      UserModel? user;
+
       if (token != null) {
         _storage.token = token;
-        debugPrint('Token stored: $token');
+        if (kDebugMode) {
+          debugPrint('Token stored: $token');
+        }
         if (Get.isRegistered<UserService>()) {
-          user = await Get.find<UserService>().fetchCurrentUser();
+           await Get.find<UserService>().fetchCurrentUser();
         }
       } else {
-        debugPrint('No token found in response: $data');
+        if (kDebugMode) {
+          debugPrint('No token found in response: $data');
+        }
       }
 
       Get.snackbar('Success', successMessage);
-      final destination =
-          user != null && user.isAdmin ? Routes.ADMIN : Routes.HOME;
-      Get.offAllNamed<dynamic>(destination);
+
+      Get.offAllNamed<dynamic>(Routes.HOME);
     } on DioException catch (e) {
       _showError(_extractError(e));
     } catch (e) {
@@ -326,6 +332,7 @@ class AuthenticationController extends GetxController {
     emailController.dispose();
     passwordController.dispose();
     nameController.dispose();
+    resetEmailController.dispose();
     super.onClose();
   }
 }

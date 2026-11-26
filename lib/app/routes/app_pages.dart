@@ -19,6 +19,7 @@ import '../modules/home/views/home_view.dart';
 import '../modules/products/bindings/products_binding.dart';
 import '../modules/products/views/products_view.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/search/bindings/search_binding.dart';
 import '../modules/search/views/search_view.dart';
 import '../modules/wishlist/bindings/wishlist_binding.dart';
@@ -90,6 +91,7 @@ class AppPages {
     GetPage(
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
+      binding: ProfileBinding(),
     ),
   ];
 }

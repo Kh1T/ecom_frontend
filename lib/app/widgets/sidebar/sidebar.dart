@@ -5,21 +5,34 @@ import '../../data/services/user_service.dart';
 import '../../routes/app_pages.dart';
 import '../../theme/app_theme.dart';
 
-class Sidebar extends StatelessWidget {
+class Sidebar extends StatefulWidget {
+
   const Sidebar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<Sidebar> createState() => _SidebarState();
+}
+
+class _SidebarState extends State<Sidebar> {
+  @override
+  void initState() {
+    super.initState();
     final userService = Get.isRegistered<UserService>()
         ? Get.find<UserService>()
         : null;
-
     if (userService != null &&
         userService.isLoggedIn &&
         userService.currentUser.value == null &&
         !userService.isLoading.value) {
       userService.fetchCurrentUser();
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final userService = Get.isRegistered<UserService>()
+        ? Get.find<UserService>()
+        : null;
 
     return Drawer(
       width: 316,

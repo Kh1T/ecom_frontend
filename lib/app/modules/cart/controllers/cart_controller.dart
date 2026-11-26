@@ -25,9 +25,9 @@ class CartItem {
 }
 
 class CartController extends GetxController {
-  final CartService _cartService = Get.find<CartService>();
+  CartService get _cartService => Get.find<CartService>();
   final cartItems = <CartItem>[].obs;
-  final isLoading = true.obs;
+  final isLoading = false.obs;
 
   @override
   void onInit() {
@@ -37,9 +37,14 @@ class CartController extends GetxController {
 
   Future<void> loadCart() async {
     isLoading.value = true;
-    final items = await _cartService.getCartItems();
-    cartItems.assignAll(items);
-    isLoading.value = false;
+    try {
+      final items = await _cartService.getCartItems();
+      cartItems.assignAll(items);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load cart');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   double get totalPrice =>

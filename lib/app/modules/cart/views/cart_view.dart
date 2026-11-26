@@ -24,23 +24,29 @@ class CartView extends GetView<CartController> {
             // Cart items or empty state
             Expanded(
               child: Obx(
-                () => controller.cartItems.isEmpty
-                    ? _buildEmptyState()
-                    : ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        itemCount: controller.cartItems.length,
-                        itemBuilder: (context, index) {
-                          final item = controller.cartItems[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: _buildCartItem(item),
-                          );
-                        },
-                      ),
+                () {
+                  if (controller.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (controller.cartItems.isEmpty) {
+                    return _buildEmptyState();
+                  }
+                  return ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    itemCount: controller.cartItems.length,
+                    itemBuilder: (context, index) {
+                      final item = controller.cartItems[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _buildCartItem(item),
+                      );
+                    },
+                  );
+                },
               ),
             ),
 
